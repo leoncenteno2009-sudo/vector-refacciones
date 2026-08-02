@@ -1,0 +1,104 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+:root {
+  --bg-ivory-main: #F4F1EA;
+  --bg-ivory-sec: #E9E5DC;
+  --color-white: #FFFFFF;
+  --color-carbon: #171717;
+  --color-graphite: #1B1F24;
+  --color-text-sec: #5E625F;
+  --color-steel: #AAB0B6;
+  --color-vector-red: #B62025;
+  --color-vector-red-dark: #86171B;
+  --color-diag-blue: #78BDE7;
+  --header-height: 80px;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Manrope', 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-ivory-main);
+  color: var(--color-carbon);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Accessibility focus rings WCAG 2.2 AA */
+:focus-visible {
+  outline: 3px solid var(--color-vector-red);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  background: var(--color-carbon);
+  color: var(--color-white);
+  padding: 0.75rem 1.25rem;
+  z-index: 9999;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* Typography styles */
+.hero-h1 {
+  font-size: clamp(2.5rem, 5.5vw, 6.25rem);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--color-carbon);
+}
+
+.section-h2 {
+  font-size: clamp(2.25rem, 4vw, 4.5rem);
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.body-intro {
+  font-size: clamp(1.125rem, 1.5vw, 1.375rem);
+  line-height: 1.5;
+  color: var(--color-text-sec);
+}
+
+/* Custom Scrollbar minimal design */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-ivory-sec);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-steel);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-vector-red);
+}
+
+/* Reduced Motion fallback override */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
