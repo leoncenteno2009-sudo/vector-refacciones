@@ -10,55 +10,57 @@ interface DistributionRouteProps {
 
 export const DistributionRoute: React.FC<DistributionRouteProps> = ({ progress }) => {
   const routeGroupRef = useRef<THREE.Group>(null)
-  const partOnTrackRef = useRef<THREE.Mesh>(null)
+  const part1Ref = useRef<THREE.Group>(null)
+  const part2Ref = useRef<THREE.Group>(null)
 
-  // Create smooth CatmullRom curve for conveyor track
-  const curve = useMemo(() => {
+  // Double-track S-curve route for industrial logistics
+  const mainCurve = useMemo(() => {
     return new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-4, -1.5, -1),
-      new THREE.Vector3(-1.5, 0, 0),
-      new THREE.Vector3(0.5, -0.5, 0.5),
-      new THREE.Vector3(2.5, 0.5, -0.2),
-      new THREE.Vector3(4.5, 1.2, -0.8),
+      new THREE.Vector3(-4.5, -1.8, -0.8),
+      new THREE.Vector3(-2.0, -0.3, 0),
+      new THREE.Vector3(0, -0.6, 0.4),
+      new THREE.Vector3(2.2, 0.4, -0.2),
+      new THREE.Vector3(4.8, 1.4, -0.9),
     ])
   }, [])
 
-  const tubeGeometry = useMemo(() => new THREE.TubeGeometry(curve, 64, 0.06, 8, false), [curve])
+  const trackTubeGeom = useMemo(() => new THREE.TubeGeometry(mainCurve, 96, 0.08, 10, false), [mainCurve])
 
-  const redTrackMaterial = useMemo(
+  // PBR Materials
+  const redLedTrackMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
         color: '#B62025',
-        roughness: 0.3,
-        metalness: 0.8,
+        roughness: 0.25,
+        metalness: 0.85,
         emissive: '#86171B',
-        emissiveIntensity: 0.5,
+        emissiveIntensity: 0.75,
         transparent: true,
         opacity: 0,
       }),
     []
   )
 
-  const scannerPortalMaterial = useMemo(
+  const scannerArchMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#FFFFFF',
+        color: '#E9E5DC',
         roughness: 0.2,
         metalness: 0.9,
         emissive: '#B62025',
-        emissiveIntensity: 0.8,
+        emissiveIntensity: 0.6,
         transparent: true,
         opacity: 0,
       }),
     []
   )
 
-  const partMaterial = useMemo(
+  const metallicPartMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#D4D8DC',
+        color: '#C0C5CC',
         roughness: 0.3,
-        metalness: 0.85,
+        metalness: 0.88,
         transparent: true,
         opacity: 0,
       }),
@@ -66,51 +68,75 @@ export const DistributionRoute: React.FC<DistributionRouteProps> = ({ progress }
   )
 
   useFrame(() => {
-    // Visible during State 03 (0.45 <= progress <= 0.80)
+    // State 03 Window: 0.44 <= progress <= 0.80
     let opacity = 0
-    if (progress >= 0.42 && progress <= 0.82) {
+    if (progress >= 0.44 && progress <= 0.8) {
       if (progress < 0.5) {
-        opacity = (progress - 0.42) / 0.08
+        opacity = (progress - 0.44) / 0.06
       } else if (progress > 0.74) {
-        opacity = 1 - (progress - 0.74) / 0.08
+        opacity = 1 - (progress - 0.74) / 0.06
       } else {
         opacity = 1
       }
     }
 
-    redTrackMaterial.opacity = opacity
-    scannerPortalMaterial.opacity = opacity
-    partMaterial.opacity = opacity
+    redLedTrackMat.opacity = opacity
+    scannerArchMat.opacity = opacity
+    metallicPartMat.opacity = opacity
 
-    // Move part along curve deterministically based on scroll
-    if (partOnTrackRef.current && progress >= 0.45 && progress <= 0.78) {
-      const t = (progress - 0.45) / 0.33
-      const clampedT = THREE.MathUtils.clamp(t, 0, 1)
-      const point = curve.getPointAt(clampedT)
-      partOnTrackRef.current.position.copy(point)
+    // Move parts along curve deterministically with scroll
+    if (progress >= 0.45 && progress <= 0.78) {
+      const t1 = THREE.MathUtils.clamp((progress - 0.45) / 0.32, 0, 1)
+      const t2 = THREE.MathUtils.clamp((progress - 0.48) / 0.32, 0, 1)
+
+      if (part1Ref.current) {
+        const pt = mainCurve.getPointAt(t1)
+        part1Ref.current.position.copy(pt)
+        part1Ref.current.rotation.y = t1 * Math.PI * 2
+      }
+
+      if (part2Ref.current) {
+        const pt = mainCurve.getPointAt(t2)
+        part2Ref.current.position.copy(pt)
+        part2Ref.current.rotation.z = t2 * Math.PI * 1.5
+      }
     }
   })
 
   return (
     <group ref={routeGroupRef} position={[0, 0, 0]}>
-      {/* 3D Track Tube */}
+      {/* Main Red LED Double Track */}
       {/* @ts-ignore */}
-      <mesh geometry={tubeGeometry} material={redTrackMaterial} />
+      <mesh geometry={trackTubeGeom} material={redLedTrackMat} />
 
-      {/* Validation Scanner Arch 1 */}
-      <mesh position={[-1.5, 0, 0]} rotation={[0, Math.PI / 4, 0]} material={scannerPortalMaterial}>
-        <torusGeometry args={[0.45, 0.03, 12, 32]} />
-      </mesh>
+      {/* Industrial Scanner Arch 1 */}
+      <group position={[-2.0, -0.3, 0]} rotation={[0, Math.PI / 4, 0]}>
+        <mesh material={scannerArchMat}>
+          <boxGeometry args={[0.1, 1.2, 1.2]} />
+        </mesh>
+      </group>
 
-      {/* Validation Scanner Arch 2 */}
-      <mesh position={[2.5, 0.5, -0.2]} rotation={[0, -Math.PI / 6, 0]} material={scannerPortalMaterial}>
-        <torusGeometry args={[0.45, 0.03, 12, 32]} />
-      </mesh>
+      {/* Industrial Scanner Arch 2 */}
+      <group position={[2.2, 0.4, -0.2]} rotation={[0, -Math.PI / 6, 0]}>
+        <mesh material={scannerArchMat}>
+          <boxGeometry args={[0.1, 1.2, 1.2]} />
+        </mesh>
+      </group>
 
-      {/* Auto Part travelling on track */}
-      <mesh ref={partOnTrackRef} material={partMaterial}>
-        <boxGeometry args={[0.3, 0.25, 0.4]} />
-      </mesh>
+      {/* Auto Parts Traveling along Conveyor Track */}
+      {/* Part 1: Vented Brake Rotor */}
+      <group ref={part1Ref} position={[-4.5, -1.8, -0.8]}>
+        <mesh material={metallicPartMat}>
+          <cylinderGeometry args={[0.3, 0.3, 0.08, 24]} />
+        </mesh>
+      </group>
+
+      {/* Part 2: Piston Component */}
+      <group ref={part2Ref} position={[-4.5, -1.8, -0.8]}>
+        <mesh material={metallicPartMat}>
+          <cylinderGeometry args={[0.2, 0.2, 0.35, 16]} />
+        </mesh>
+      </group>
     </group>
   )
 }

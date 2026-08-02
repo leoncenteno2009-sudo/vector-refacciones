@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { siteConfig } from '@/config/site.config'
 import './globals.css'
 
+const baseUrl = 'https://leoncenteno2009-sudo.github.io/vector-refacciones/'
+
 export const metadata: Metadata = {
   title: `${siteConfig.name} | ${siteConfig.descriptor}`,
   description: siteConfig.metaDescription,
@@ -15,11 +17,14 @@ export const metadata: Metadata = {
     'motor',
     'VECTOR refacciones',
   ],
-  metadataBase: new URL(siteConfig.url),
+  metadataBase: new URL(baseUrl),
+  alternates: {
+    canonical: baseUrl,
+  },
   openGraph: {
     title: `${siteConfig.name} | ${siteConfig.descriptor}`,
     description: siteConfig.metaDescription,
-    url: siteConfig.url,
+    url: baseUrl,
     siteName: siteConfig.name,
     locale: 'es_MX',
     type: 'website',
@@ -58,10 +63,7 @@ export default function RootLayout({
               '@type': 'AutoPartsStore',
               name: siteConfig.name,
               description: siteConfig.descriptor,
-              url: siteConfig.url,
-              telephone: siteConfig.contact.phone || undefined,
-              email: siteConfig.contact.email || undefined,
-              address: siteConfig.contact.address || undefined,
+              url: baseUrl,
               priceRange: '$$',
             }),
           }}

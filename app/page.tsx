@@ -8,6 +8,8 @@ import { Categories } from '@/components/sections/Categories'
 import { CompatibilityFinder } from '@/components/sections/CompatibilityFinder'
 import { Distribution } from '@/components/sections/Distribution'
 import { Workshops } from '@/components/sections/Workshops'
+import { AboutSection } from '@/components/sections/AboutSection'
+import { ContactSection } from '@/components/sections/ContactSection'
 import { QuoteProcess } from '@/components/sections/QuoteProcess'
 import { QuoteForm } from '@/components/sections/QuoteForm'
 import { FinalCTA } from '@/components/sections/FinalCTA'
@@ -27,6 +29,8 @@ export default function Home() {
         <CompatibilityFinder />
         <Distribution />
         <Workshops />
+        <AboutSection />
+        <ContactSection />
         <QuoteProcess />
         <QuoteForm />
         <FinalCTA />

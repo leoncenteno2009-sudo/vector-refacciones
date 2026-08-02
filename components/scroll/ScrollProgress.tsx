@@ -3,17 +3,19 @@
 import React from 'react'
 
 interface ScrollProgressProps {
-  progress: number
+  progressRef: React.MutableRefObject<number>
   currentStateIndex: number
 }
 
-export const ScrollProgress: React.FC<ScrollProgressProps> = ({ progress, currentStateIndex }) => {
+export const ScrollProgress: React.FC<ScrollProgressProps> = ({ progressRef, currentStateIndex }) => {
   const steps = [
     { label: '01 Descubrir', percent: '0%' },
     { label: '02 Compatibilidad', percent: '33%' },
     { label: '03 Distribución', percent: '66%' },
     { label: '04 Cotización', percent: '100%' },
   ]
+
+  const p = progressRef.current || 0
 
   return (
     <div className="fixed right-6 top-1/2 -translate-y-1/2 z-30 hidden xl:flex flex-col items-end gap-5">
@@ -42,7 +44,7 @@ export const ScrollProgress: React.FC<ScrollProgressProps> = ({ progress, curren
       <div className="w-[2px] h-24 bg-steel/20 rounded-full mt-2 overflow-hidden relative">
         <div
           className="w-full bg-vector-red transition-all duration-150"
-          style={{ height: `${Math.round(progress * 100)}%` }}
+          style={{ height: `${Math.round(p * 100)}%` }}
         />
       </div>
     </div>

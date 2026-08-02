@@ -11,7 +11,8 @@ export const VectorScrollStory: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const stickyRef = useRef<HTMLDivElement>(null)
 
-  const [progress, setProgress] = useState(0)
+  // Use mutable refs for smooth 60fps render loop without triggering React re-renders on every scroll pixel
+  const progressRef = useRef(0)
   const [currentStateIndex, setCurrentStateIndex] = useState(0)
 
   useEffect(() => {
@@ -29,18 +30,21 @@ export const VectorScrollStory: React.FC = () => {
         invalidateOnRefresh: true,
         onUpdate: (self) => {
           const p = self.progress
-          setProgress(p)
+          progressRef.current = p
 
-          // Determine current state index
+          // Calculate discrete state index for HTML copy transitions only
+          let nextIndex = 0
           if (p < 0.24) {
-            setCurrentStateIndex(0)
+            nextIndex = 0
           } else if (p < 0.5) {
-            setCurrentStateIndex(1)
+            nextIndex = 1
           } else if (p < 0.76) {
-            setCurrentStateIndex(2)
+            nextIndex = 2
           } else {
-            setCurrentStateIndex(3)
+            nextIndex = 3
           }
+
+          setCurrentStateIndex((prev) => (prev !== nextIndex ? nextIndex : prev))
         },
       })
     })
@@ -65,18 +69,18 @@ export const VectorScrollStory: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center h-[calc(100vh-100px)]">
             {/* Column Left (1-5): Accessible HTML Text Content */}
             <div className="lg:col-span-5 z-20 flex items-center">
-              <ScrollStageCopy progress={progress} currentStateIndex={currentStateIndex} />
+              <ScrollStageCopy progress={progressRef.current} currentStateIndex={currentStateIndex} />
             </div>
 
             {/* Column Right (6-12): 3D Canvas / Visual Scene */}
             <div className="lg:col-span-7 h-full w-full relative z-10 min-h-[350px] lg:min-h-[500px]">
-              <VectorCanvas progress={progress} currentStateIndex={currentStateIndex} />
+              <VectorCanvas progressRef={progressRef} currentStateIndex={currentStateIndex} />
             </div>
           </div>
         </div>
 
         {/* Progress Sidebar */}
-        <ScrollProgress progress={progress} currentStateIndex={currentStateIndex} />
+        <ScrollProgress progressRef={progressRef} currentStateIndex={currentStateIndex} />
       </div>
     </section>
   )

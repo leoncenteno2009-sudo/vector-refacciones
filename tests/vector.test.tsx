@@ -27,4 +27,13 @@ describe('VECTOR Landing Page Component Suite', () => {
     expect(await screen.findByText('Ingresa un teléfono o correo válido')).toBeInTheDocument()
     expect(await screen.findByText('Debes aceptar el aviso de privacidad')).toBeInTheDocument()
   })
+
+  it('verifies deep links #nosotros and #contacto exist in navigation', () => {
+    render(<Header />)
+    const nosotrosLink = screen.getByRole('link', { name: 'Nosotros' })
+    const contactoLink = screen.getByRole('link', { name: 'Contacto' })
+
+    expect(nosotrosLink).toHaveAttribute('href', '#nosotros')
+    expect(contactoLink).toHaveAttribute('href', '#contacto')
+  })
 })
