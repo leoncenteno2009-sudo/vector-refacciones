@@ -19,7 +19,7 @@ interface SequenceSource {
 }
 
 const FRAME_COUNT = 180
-const HEADER_CROP = 68
+const HEADER_CROP = 0
 const SOURCE_WIDTH = 1280
 const SOURCE_HEIGHT = 720
 const sequences: SequenceSource[] = [
@@ -27,9 +27,9 @@ const sequences: SequenceSource[] = [
     video: '/videos/scroll/hero.mp4',
     startTime: 0.12,
     endTime: 5.65,
-    cropLeft: 520,
-    cropRight: 180,
-    cropBottom: 170,
+    cropLeft: 200,
+    cropRight: 120,
+    cropBottom: 100,
     focalX: 0.5,
     maskRecordedFrame: true,
   },
@@ -37,19 +37,19 @@ const sequences: SequenceSource[] = [
     video: '/videos/scroll/compatibility.mp4',
     startTime: 0.12,
     endTime: 6.75,
-    cropLeft: 445,
-    cropRight: 180,
-    cropBottom: 170,
-    focalX: 0.48,
+    cropLeft: 180,
+    cropRight: 120,
+    cropBottom: 100,
+    focalX: 0.5,
   },
   {
     video: '/videos/scroll/distribution.mp4',
     startTime: 0.12,
     endTime: 5.55,
-    cropLeft: 310,
-    cropRight: 180,
-    cropBottom: 170,
-    focalX: 0.44,
+    cropLeft: 160,
+    cropRight: 120,
+    cropBottom: 100,
+    focalX: 0.5,
   },
 ]
 
@@ -111,8 +111,8 @@ function drawVideo(
   if (video.readyState < 2 || !video.videoWidth) return false
   const sourceWidth = SOURCE_WIDTH - sequence.cropLeft - sequence.cropRight
   const sourceHeight = SOURCE_HEIGHT - HEADER_CROP - sequence.cropBottom
-  const visualX = wideLayout ? width * 0.28 : 0
-  const visualWidth = wideLayout ? width * 0.72 : width
+  const visualX = 0
+  const visualWidth = width
   const rect = getCoverRect(
     visualX,
     0,
@@ -127,7 +127,7 @@ function drawVideo(
   context.rect(visualX, 0, visualWidth, height)
   context.clip()
   context.globalAlpha = opacity
-  context.filter = 'saturate(0.96) contrast(1.015)'
+  context.filter = 'saturate(0.98) contrast(1.02)'
   context.drawImage(
     video,
     sequence.cropLeft,
@@ -143,30 +143,28 @@ function drawVideo(
   if (sequence.maskRecordedFrame) {
     context.filter = 'none'
 
-    const leftFade = context.createLinearGradient(visualX, 0, width * 0.47, 0)
-    leftFade.addColorStop(0, 'rgba(255, 255, 255, 1)')
-    leftFade.addColorStop(0.28, 'rgba(255, 255, 255, 1)')
-    leftFade.addColorStop(0.68, 'rgba(255, 255, 255, 0.64)')
+    const leftFade = context.createLinearGradient(0, 0, width * 0.38, 0)
+    leftFade.addColorStop(0, 'rgba(255, 255, 255, 0.96)')
+    leftFade.addColorStop(0.35, 'rgba(255, 255, 255, 0.72)')
+    leftFade.addColorStop(0.75, 'rgba(255, 255, 255, 0.22)')
     leftFade.addColorStop(1, 'rgba(255, 255, 255, 0)')
     context.fillStyle = leftFade
-    context.fillRect(visualX, 0, width * 0.47 - visualX, height)
+    context.fillRect(0, 0, width * 0.38, height)
 
-    const rightFade = context.createLinearGradient(width * 0.89, 0, width, 0)
+    const rightFade = context.createLinearGradient(width * 0.92, 0, width, 0)
     rightFade.addColorStop(0, 'rgba(255, 255, 255, 0)')
-    rightFade.addColorStop(0.42, 'rgba(255, 255, 255, 0.5)')
-    rightFade.addColorStop(0.66, 'rgba(255, 255, 255, 1)')
+    rightFade.addColorStop(0.6, 'rgba(255, 255, 255, 0.5)')
     rightFade.addColorStop(1, 'rgba(255, 255, 255, 1)')
     context.fillStyle = rightFade
-    context.fillRect(width * 0.89, 0, width * 0.11, height)
+    context.fillRect(width * 0.92, 0, width * 0.08, height)
 
-    const bottomFade = context.createLinearGradient(0, height * 0.53, 0, height)
+    const bottomFade = context.createLinearGradient(0, height * 0.65, 0, height)
     bottomFade.addColorStop(0, 'rgba(255, 255, 255, 0)')
-    bottomFade.addColorStop(0.18, 'rgba(255, 255, 255, 0.55)')
-    bottomFade.addColorStop(0.3, 'rgba(255, 255, 255, 0.96)')
-    bottomFade.addColorStop(0.4, 'rgba(255, 255, 255, 1)')
+    bottomFade.addColorStop(0.4, 'rgba(255, 255, 255, 0.45)')
+    bottomFade.addColorStop(0.8, 'rgba(255, 255, 255, 0.92)')
     bottomFade.addColorStop(1, 'rgba(255, 255, 255, 1)')
     context.fillStyle = bottomFade
-    context.fillRect(visualX, height * 0.53, visualWidth, height * 0.47)
+    context.fillRect(0, height * 0.65, width, height * 0.35)
   }
 
   context.restore()

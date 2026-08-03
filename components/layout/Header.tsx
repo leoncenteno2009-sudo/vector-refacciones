@@ -40,7 +40,7 @@ export const Header: React.FC = () => {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] h-[80px] flex items-center ${
         scrolled
           ? 'bg-white/80 backdrop-blur-md border-b border-carbon/10 shadow-[0_4px_20px_rgba(0,0,0,0.05)]'
-          : 'bg-white/30 backdrop-blur-xs border-b border-transparent'
+          : 'bg-transparent border-b border-transparent'
       }`}
     >
       <div className="max-w-site w-full mx-auto px-5 md:px-8 lg:px-12 flex items-center justify-between">
