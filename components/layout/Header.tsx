@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react'
 import { siteConfig } from '@/config/site.config'
 import { Button } from '@/components/ui/Button'
 import { Menu, X, ArrowRight } from 'lucide-react'
-import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon'
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -93,21 +92,7 @@ export const Header: React.FC = () => {
         </nav>
 
         {/* Right CTA */}
-        <div className="hidden sm:flex items-center gap-3">
-          {siteConfig.contact.whatsapp && (
-            <a
-              href={`${siteConfig.contact.whatsapp}?text=${encodeURIComponent(
-                'Hola VECTOR, me gustaría consultar la disponibilidad y cotizar una refacción automotriz.'
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm shadow-[0_4px_14px_rgba(37,211,102,0.3)] hover:shadow-[0_6px_20px_rgba(37,211,102,0.45)] hover:-translate-y-0.5 transition-all duration-300"
-            >
-              <WhatsAppIcon className="w-4 h-4 text-white shrink-0" />
-              <span>WhatsApp</span>
-            </a>
-          )}
-
+        <div className="hidden lg:flex items-center gap-4">
           <Button href={siteConfig.mainCTA.href} variant="primary">
             {siteConfig.mainCTA.label}
             <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
@@ -149,20 +134,6 @@ export const Header: React.FC = () => {
             ))}
           </nav>
           <div className="mt-8 pt-6 border-t border-carbon/10 flex flex-col gap-4">
-            {siteConfig.contact.whatsapp && (
-              <a
-                href={`${siteConfig.contact.whatsapp}?text=${encodeURIComponent(
-                  'Hola VECTOR, me gustaría consultar la disponibilidad y cotizar una refacción automotriz.'
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-lg bg-[#25D366] text-white font-bold text-base shadow-md"
-              >
-                <WhatsAppIcon className="w-5 h-5 text-white" />
-                <span>Contactar por WhatsApp</span>
-              </a>
-            )}
             <Button
               href={siteConfig.mainCTA.href}
               variant="vectorRed"
