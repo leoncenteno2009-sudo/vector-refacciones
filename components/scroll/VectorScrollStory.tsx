@@ -24,7 +24,7 @@ export const VectorScrollStory: React.FC = () => {
         trigger: containerRef.current,
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.6,
+        scrub: 1.2,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
           const { progress, direction } = self

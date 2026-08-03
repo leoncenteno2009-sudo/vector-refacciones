@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { siteConfig } from '@/config/site.config'
 import { Button } from '@/components/ui/Button'
 import { Menu, X, ArrowRight } from 'lucide-react'
+import { WhatsAppIcon } from '@/components/ui/WhatsAppIcon'
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -37,17 +38,17 @@ export const Header: React.FC = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 h-[80px] flex items-center ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] h-[80px] flex items-center ${
         scrolled
-          ? 'bg-ivory-100/40 backdrop-blur-sm border-b border-carbon/10 shadow-[0_8px_30px_rgba(23,23,23,0.04)]'
-          : 'bg-ivory-100/10 border-b border-transparent'
+          ? 'bg-white/80 backdrop-blur-md border-b border-carbon/10 shadow-[0_4px_20px_rgba(0,0,0,0.05)]'
+          : 'bg-white/30 backdrop-blur-xs border-b border-transparent'
       }`}
     >
       <div className="max-w-site w-full mx-auto px-5 md:px-8 lg:px-12 flex items-center justify-between">
         {/* Logo VECTOR */}
         <a
           href="#"
-          className="flex items-center gap-3 group focus-visible:ring-2 focus-visible:ring-vector-red rounded-sm p-1"
+          className="flex items-center gap-3 group focus-visible:ring-2 focus-visible:ring-vector-red rounded-sm p-1 transition-transform duration-300 hover:scale-[1.01]"
           aria-label="VECTOR - Refacciones y distribución automotriz"
         >
           <svg
@@ -56,7 +57,7 @@ export const Header: React.FC = () => {
             viewBox="0 0 40 40"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="w-8 h-8 text-carbon group-hover:text-vector-red transition-colors"
+            className="w-8 h-8 text-carbon group-hover:text-vector-red transition-colors duration-300"
           >
             <path
               d="M6 8L20 34L34 8H26L20 20L14 8H6Z"
@@ -64,7 +65,7 @@ export const Header: React.FC = () => {
             />
             <path
               d="M20 25L24 16H29L20 32L11 16H16L20 25Z"
-              fill="#B62025"
+              fill="#D92B2B"
             />
           </svg>
           <div className="flex flex-col">
@@ -83,18 +84,33 @@ export const Header: React.FC = () => {
             <a
               key={item.href}
               href={item.href}
-              className="text-[15px] font-medium text-carbon/90 hover:text-vector-red transition-colors py-2 focus-visible:ring-2 focus-visible:ring-vector-red rounded"
+              className="text-[15px] font-medium text-carbon/90 hover:text-vector-red transition-all duration-300 py-2 focus-visible:ring-2 focus-visible:ring-vector-red rounded relative group"
             >
               {item.label}
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-vector-red transition-all duration-300 group-hover:w-full" />
             </a>
           ))}
         </nav>
 
         {/* Right CTA */}
-        <div className="hidden lg:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-3">
+          {siteConfig.contact.whatsapp && (
+            <a
+              href={`${siteConfig.contact.whatsapp}?text=${encodeURIComponent(
+                'Hola VECTOR, me gustaría consultar la disponibilidad y cotizar una refacción automotriz.'
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm shadow-[0_4px_14px_rgba(37,211,102,0.3)] hover:shadow-[0_6px_20px_rgba(37,211,102,0.45)] hover:-translate-y-0.5 transition-all duration-300"
+            >
+              <WhatsAppIcon className="w-4 h-4 text-white shrink-0" />
+              <span>WhatsApp</span>
+            </a>
+          )}
+
           <Button href={siteConfig.mainCTA.href} variant="primary">
             {siteConfig.mainCTA.label}
-            <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-1" />
+            <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" />
           </Button>
         </div>
 
@@ -115,7 +131,7 @@ export const Header: React.FC = () => {
       {mobileMenuOpen && (
         <div
           id="mobile-menu"
-          className="fixed inset-0 top-[80px] bg-ivory-100 z-40 lg:hidden flex flex-col px-6 py-8 border-t border-carbon/10 overflow-y-auto"
+          className="fixed inset-0 top-[80px] bg-white/95 backdrop-blur-xl z-40 lg:hidden flex flex-col px-6 py-8 border-t border-carbon/10 overflow-y-auto"
           role="dialog"
           aria-modal="true"
           aria-label="Menú móvil"
@@ -133,6 +149,20 @@ export const Header: React.FC = () => {
             ))}
           </nav>
           <div className="mt-8 pt-6 border-t border-carbon/10 flex flex-col gap-4">
+            {siteConfig.contact.whatsapp && (
+              <a
+                href={`${siteConfig.contact.whatsapp}?text=${encodeURIComponent(
+                  'Hola VECTOR, me gustaría consultar la disponibilidad y cotizar una refacción automotriz.'
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-lg bg-[#25D366] text-white font-bold text-base shadow-md"
+              >
+                <WhatsAppIcon className="w-5 h-5 text-white" />
+                <span>Contactar por WhatsApp</span>
+              </a>
+            )}
             <Button
               href={siteConfig.mainCTA.href}
               variant="vectorRed"

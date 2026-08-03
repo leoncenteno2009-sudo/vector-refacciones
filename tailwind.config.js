@@ -9,18 +9,18 @@ module.exports = {
     extend: {
       colors: {
         ivory: {
-          100: '#F4F1EA',
-          200: '#E9E5DC',
-          300: '#DDD8CE',
+          100: '#FFFFFF',
+          200: '#F8F9FA',
+          300: '#F1F3F5',
         },
-        carbon: '#171717',
-        graphite: '#1B1F24',
-        'text-secondary': '#5E625F',
-        steel: '#AAB0B6',
+        carbon: '#0D0F12',
+        graphite: '#16181D',
+        'text-secondary': '#525866',
+        steel: '#9EA5B0',
         vector: {
-          red: '#B62025',
-          darkRed: '#86171B',
-          blueDiag: '#78BDE7',
+          red: '#D92B2B',
+          darkRed: '#A81B1B',
+          blueDiag: '#0088FF',
         },
       },
       fontFamily: {

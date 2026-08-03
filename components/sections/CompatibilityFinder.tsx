@@ -22,7 +22,7 @@ export const CompatibilityFinder: React.FC = () => {
   }
 
   return (
-    <section id="compatibilidad" className="ambient-section ambient-orbits py-24 bg-ivory-100 border-t border-carbon/10" aria-labelledby="finder-heading">
+    <section id="compatibilidad" className="ambient-section ambient-orbits py-24 bg-ivory-200 border-t border-carbon/10" aria-labelledby="finder-heading">
       <div className="max-w-site mx-auto px-5 md:px-8 lg:px-12">
         <div className="max-w-3xl mb-12">
           <span className="text-xs uppercase font-bold tracking-widest text-vector-red">
@@ -38,7 +38,7 @@ export const CompatibilityFinder: React.FC = () => {
 
         <form
           onSubmit={handleSearch}
-          className="bg-white p-8 md:p-10 rounded-2xl shadow-xl border border-carbon/10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="bg-white p-8 md:p-10 rounded-2xl shadow-[0_12px_40px_rgba(13,15,18,0.06)] border border-carbon/10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
         >
           {/* Make Select */}
           <div className="flex flex-col gap-2">
@@ -53,7 +53,7 @@ export const CompatibilityFinder: React.FC = () => {
                 setModel('')
               }}
               required
-              className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-100 text-carbon font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red outline-none"
+              className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-200/60 text-carbon font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
             >
               <option value="">Selecciona marca</option>
               {sampleVehicleData.makes.map((m) => (
@@ -75,7 +75,7 @@ export const CompatibilityFinder: React.FC = () => {
               onChange={(e) => setModel(e.target.value)}
               disabled={!make}
               required
-              className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-100 text-carbon font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red outline-none disabled:opacity-50"
+              className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-200/60 text-carbon font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none disabled:opacity-50"
             >
               <option value="">
                 {make ? 'Selecciona modelo' : 'Primero elige marca'}
@@ -98,7 +98,7 @@ export const CompatibilityFinder: React.FC = () => {
               value={year}
               onChange={(e) => setYear(e.target.value)}
               required
-              className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-100 text-carbon font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red outline-none"
+              className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-200/60 text-carbon font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
             >
               <option value="">Selecciona año</option>
               {sampleVehicleData.years.map((y) => (
@@ -120,7 +120,7 @@ export const CompatibilityFinder: React.FC = () => {
               placeholder="Ej. Balatas delanteras, Amortiguador"
               value={partName}
               onChange={(e) => setPartName(e.target.value)}
-              className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-100 text-carbon font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red outline-none placeholder:text-text-secondary/60"
+              className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-200/60 text-carbon font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none placeholder:text-text-secondary/60"
             />
           </div>
 

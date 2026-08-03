@@ -39,6 +39,15 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  icons: {
+    icon: [
+      { url: `${assetBasePath}/favicon.ico` },
+      { url: `${assetBasePath}/favicon.png`, type: 'image/png' },
+      { url: `${assetBasePath}/icon.png`, type: 'image/png' },
+    ],
+    shortcut: `${assetBasePath}/favicon.ico`,
+    apple: `${assetBasePath}/apple-touch-icon.png`,
+  },
 }
 
 export default function RootLayout({
@@ -49,6 +58,10 @@ export default function RootLayout({
   return (
     <html lang="es-MX" className="scroll-smooth">
       <head>
+        <link rel="shortcut icon" href={`${assetBasePath}/favicon.ico`} />
+        <link rel="icon" type="image/png" sizes="32x32" href={`${assetBasePath}/favicon-32x32.png`} />
+        <link rel="icon" type="image/png" sizes="16x16" href={`${assetBasePath}/favicon-16x16.png`} />
+        <link rel="apple-touch-icon" sizes="180x180" href={`${assetBasePath}/apple-touch-icon.png`} />
         <link
           rel="preload"
           href={`${assetBasePath}/videos/scroll/hero.mp4`}

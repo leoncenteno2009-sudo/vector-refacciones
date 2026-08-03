@@ -35,8 +35,8 @@ export const siteConfig: SiteConfig = {
   metaDescription:
     'Encuentra componentes automotrices compatibles para tu vehículo, taller o negocio. Inventario, distribución nacional y cotización ágil con VECTOR.',
   contact: {
-    phone: null,
-    whatsapp: 'https://wa.me/5215500000000',
+    phone: '+52 1 55 3100 1296',
+    whatsapp: 'https://wa.me/5215531001296',
     email: 'contacto@vector-refacciones.com',
     address: null,
     workingHours: 'Lunes a Viernes: 8:00 AM - 6:00 PM',

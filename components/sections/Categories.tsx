@@ -39,18 +39,18 @@ export const Categories: React.FC = () => {
               <a
                 key={cat.id}
                 href="#compatibilidad"
-                className="group p-8 rounded-2xl bg-ivory-100/60 border border-carbon/10 hover:border-vector-red hover:bg-white hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+                className="group p-8 rounded-2xl bg-ivory-200/50 border border-carbon/10 hover:border-vector-red/60 hover:bg-white hover:-translate-y-1.5 hover:shadow-[0_16px_36px_rgba(13,15,18,0.08)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <div className="w-14 h-14 rounded-xl bg-carbon text-white flex items-center justify-center group-hover:bg-vector-red transition-colors">
+                    <div className="w-14 h-14 rounded-xl bg-carbon text-white flex items-center justify-center group-hover:bg-vector-red group-hover:shadow-[0_6px_20px_rgba(217,43,43,0.35)] transition-all duration-300">
                       <IconComponent className="w-7 h-7" />
                     </div>
                     <span className="text-xs font-semibold px-3 py-1 rounded-full bg-carbon/5 text-text-secondary">
                       {cat.tag}
                     </span>
                   </div>
-                  <h3 className="text-2xl font-bold text-carbon mb-3 group-hover:text-vector-red transition-colors">
+                  <h3 className="text-2xl font-bold text-carbon mb-3 group-hover:text-vector-red transition-colors duration-300">
                     {cat.name}
                   </h3>
                   <p className="text-text-secondary text-sm leading-relaxed mb-6">
@@ -58,9 +58,9 @@ export const Categories: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="flex items-center text-sm font-semibold text-carbon group-hover:text-vector-red pt-4 border-t border-carbon/5">
+                <div className="flex items-center text-sm font-semibold text-carbon group-hover:text-vector-red pt-4 border-t border-carbon/5 transition-colors duration-300">
                   <span>Explorar refacciones</span>
-                  <ArrowUpRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  <ArrowUpRight className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </div>
               </a>
             )

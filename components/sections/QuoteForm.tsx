@@ -102,9 +102,9 @@ export const QuoteForm: React.FC = () => {
   }
 
   return (
-    <section id="cotizacion" className="ambient-section ambient-orbits py-24 bg-ivory-100 border-t border-carbon/10" aria-labelledby="quote-heading">
+    <section id="cotizacion" className="ambient-section ambient-orbits py-24 bg-ivory-200 border-t border-carbon/10" aria-labelledby="quote-heading">
       <div className="max-w-site mx-auto px-5 md:px-8 lg:px-12">
-        <div className="max-w-3xl mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-carbon/10">
+        <div className="max-w-3xl mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-[0_16px_48px_rgba(13,15,18,0.06)] border border-carbon/10">
           <div className="text-center mb-10">
             <span className="text-xs uppercase font-bold tracking-widest text-vector-red">
               Cotización Sin Compromiso
@@ -203,7 +203,7 @@ export const QuoteForm: React.FC = () => {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     aria-describedby={errors.name ? 'name-error' : undefined}
-                    className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-100 font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red outline-none"
+                    className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-200/60 font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
                     placeholder="Ej. Roberto Gómez"
                   />
                   {errors.name && (
@@ -225,7 +225,7 @@ export const QuoteForm: React.FC = () => {
                     value={formData.contact}
                     onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
                     aria-describedby={errors.contact ? 'contact-error' : undefined}
-                    className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-100 font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red outline-none"
+                    className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-200/60 font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
                     placeholder="55 1234 5678 o correo@ejemplo.com"
                   />
                   {errors.contact && (
@@ -247,10 +247,10 @@ export const QuoteForm: React.FC = () => {
                       key={type}
                       type="button"
                       onClick={() => setFormData({ ...formData, clientType: type })}
-                      className={`h-12 px-4 rounded-lg border text-xs font-bold transition-all ${
+                      className={`h-12 px-4 rounded-lg border text-xs font-bold transition-all duration-300 ${
                         formData.clientType === type
-                          ? 'border-vector-red bg-vector-red/10 text-vector-red ring-2 ring-vector-red/20'
-                          : 'border-carbon/20 bg-ivory-100 text-carbon hover:bg-carbon/5'
+                          ? 'border-vector-red bg-vector-red/10 text-vector-red ring-2 ring-vector-red/30 shadow-sm'
+                          : 'border-carbon/20 bg-ivory-200/60 text-carbon hover:bg-white hover:border-carbon/40'
                       }`}
                     >
                       {type}
@@ -272,7 +272,7 @@ export const QuoteForm: React.FC = () => {
                     value={formData.make}
                     onChange={(e) => setFormData({ ...formData, make: e.target.value })}
                     placeholder="Ej. Nissan"
-                    className="w-full h-11 px-3 rounded-lg border border-carbon/20 bg-ivory-100 text-sm font-medium focus:border-vector-red outline-none"
+                    className="w-full h-11 px-3 rounded-lg border border-carbon/20 bg-ivory-200/60 text-sm font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
                   />
                   {errors.make && <p className="text-xs text-vector-red mt-0.5">{errors.make}</p>}
                 </div>
@@ -288,7 +288,7 @@ export const QuoteForm: React.FC = () => {
                     value={formData.model}
                     onChange={(e) => setFormData({ ...formData, model: e.target.value })}
                     placeholder="Ej. Versa"
-                    className="w-full h-11 px-3 rounded-lg border border-carbon/20 bg-ivory-100 text-sm font-medium focus:border-vector-red outline-none"
+                    className="w-full h-11 px-3 rounded-lg border border-carbon/20 bg-ivory-200/60 text-sm font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
                   />
                   {errors.model && <p className="text-xs text-vector-red mt-0.5">{errors.model}</p>}
                 </div>
@@ -304,7 +304,7 @@ export const QuoteForm: React.FC = () => {
                     value={formData.year}
                     onChange={(e) => setFormData({ ...formData, year: e.target.value })}
                     placeholder="Ej. 2021"
-                    className="w-full h-11 px-3 rounded-lg border border-carbon/20 bg-ivory-100 text-sm font-medium focus:border-vector-red outline-none"
+                    className="w-full h-11 px-3 rounded-lg border border-carbon/20 bg-ivory-200/60 text-sm font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
                   />
                   {errors.year && <p className="text-xs text-vector-red mt-0.5">{errors.year}</p>}
                 </div>
@@ -322,7 +322,7 @@ export const QuoteForm: React.FC = () => {
                   value={formData.part}
                   onChange={(e) => setFormData({ ...formData, part: e.target.value })}
                   placeholder="Ej. Amortiguadores delanteros, Kit de embrague, etc."
-                  className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-100 font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red outline-none"
+                  className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-200/60 font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
                 />
                 {errors.part && <p className="text-xs text-vector-red mt-1">{errors.part}</p>}
               </div>
@@ -338,7 +338,7 @@ export const QuoteForm: React.FC = () => {
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   placeholder="Número de serie (VIN), versión específica o comentarios extra."
-                  className="w-full p-4 rounded-lg border border-carbon/20 bg-ivory-100 font-medium focus:border-vector-red outline-none"
+                  className="w-full p-4 rounded-lg border border-carbon/20 bg-ivory-200/60 font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
                 />
               </div>
 

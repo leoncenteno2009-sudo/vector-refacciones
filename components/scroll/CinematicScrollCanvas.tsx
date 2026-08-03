@@ -144,27 +144,27 @@ function drawVideo(
     context.filter = 'none'
 
     const leftFade = context.createLinearGradient(visualX, 0, width * 0.47, 0)
-    leftFade.addColorStop(0, 'rgba(244, 240, 232, 1)')
-    leftFade.addColorStop(0.28, 'rgba(244, 240, 232, 1)')
-    leftFade.addColorStop(0.68, 'rgba(244, 240, 232, 0.64)')
-    leftFade.addColorStop(1, 'rgba(244, 240, 232, 0)')
+    leftFade.addColorStop(0, 'rgba(255, 255, 255, 1)')
+    leftFade.addColorStop(0.28, 'rgba(255, 255, 255, 1)')
+    leftFade.addColorStop(0.68, 'rgba(255, 255, 255, 0.64)')
+    leftFade.addColorStop(1, 'rgba(255, 255, 255, 0)')
     context.fillStyle = leftFade
     context.fillRect(visualX, 0, width * 0.47 - visualX, height)
 
     const rightFade = context.createLinearGradient(width * 0.89, 0, width, 0)
-    rightFade.addColorStop(0, 'rgba(244, 240, 232, 0)')
-    rightFade.addColorStop(0.42, 'rgba(244, 240, 232, 0.5)')
-    rightFade.addColorStop(0.66, 'rgba(244, 240, 232, 1)')
-    rightFade.addColorStop(1, 'rgba(244, 240, 232, 1)')
+    rightFade.addColorStop(0, 'rgba(255, 255, 255, 0)')
+    rightFade.addColorStop(0.42, 'rgba(255, 255, 255, 0.5)')
+    rightFade.addColorStop(0.66, 'rgba(255, 255, 255, 1)')
+    rightFade.addColorStop(1, 'rgba(255, 255, 255, 1)')
     context.fillStyle = rightFade
     context.fillRect(width * 0.89, 0, width * 0.11, height)
 
     const bottomFade = context.createLinearGradient(0, height * 0.53, 0, height)
-    bottomFade.addColorStop(0, 'rgba(244, 240, 232, 0)')
-    bottomFade.addColorStop(0.18, 'rgba(244, 240, 232, 0.55)')
-    bottomFade.addColorStop(0.3, 'rgba(244, 240, 232, 0.96)')
-    bottomFade.addColorStop(0.4, 'rgba(244, 240, 232, 1)')
-    bottomFade.addColorStop(1, 'rgba(244, 240, 232, 1)')
+    bottomFade.addColorStop(0, 'rgba(255, 255, 255, 0)')
+    bottomFade.addColorStop(0.18, 'rgba(255, 255, 255, 0.55)')
+    bottomFade.addColorStop(0.3, 'rgba(255, 255, 255, 0.96)')
+    bottomFade.addColorStop(0.4, 'rgba(255, 255, 255, 1)')
+    bottomFade.addColorStop(1, 'rgba(255, 255, 255, 1)')
     context.fillStyle = bottomFade
     context.fillRect(visualX, height * 0.53, visualWidth, height * 0.47)
   }
@@ -248,7 +248,7 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
           canvas.height = height
         }
 
-        context.fillStyle = '#f4f0e8'
+        context.fillStyle = '#ffffff'
         context.fillRect(0, 0, width, height)
 
         sequences.forEach((sequence, index) => {

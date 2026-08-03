@@ -14,6 +14,7 @@ import { QuoteProcess } from '@/components/sections/QuoteProcess'
 import { QuoteForm } from '@/components/sections/QuoteForm'
 import { FinalCTA } from '@/components/sections/FinalCTA'
 import { Footer } from '@/components/layout/Footer'
+import { WhatsAppButton } from '@/components/ui/WhatsAppButton'
 
 export default function Home() {
   return (
@@ -36,6 +37,7 @@ export default function Home() {
         <FinalCTA />
       </main>
       <Footer />
+      <WhatsAppButton />
     </>
   )
 }

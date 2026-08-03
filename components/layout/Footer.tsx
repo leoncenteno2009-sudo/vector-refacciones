@@ -14,7 +14,7 @@ export const Footer: React.FC = () => {
             <div className="flex items-center gap-3">
               <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6 8L20 34L34 8H26L20 20L14 8H6Z" fill="#FFFFFF" />
-                <path d="M20 25L24 16H29L20 32L11 16H16L20 25Z" fill="#B62025" />
+                <path d="M20 25L24 16H29L20 32L11 16H16L20 25Z" fill="#D92B2B" />
               </svg>
               <span className="font-bold text-2xl tracking-tight text-white">VECTOR</span>
             </div>
