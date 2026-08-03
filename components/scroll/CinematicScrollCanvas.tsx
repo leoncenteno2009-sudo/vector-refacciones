@@ -19,7 +19,7 @@ interface SequenceSource {
 }
 
 const FRAME_COUNT = 180
-const HEADER_CROP = 0
+const HEADER_CROP = 68
 const SOURCE_WIDTH = 1280
 const SOURCE_HEIGHT = 720
 const sequences: SequenceSource[] = [
@@ -27,9 +27,9 @@ const sequences: SequenceSource[] = [
     video: '/videos/scroll/hero.mp4',
     startTime: 0.12,
     endTime: 5.65,
-    cropLeft: 200,
-    cropRight: 120,
-    cropBottom: 100,
+    cropLeft: 520,
+    cropRight: 160,
+    cropBottom: 160,
     focalX: 0.5,
     maskRecordedFrame: true,
   },
@@ -37,19 +37,19 @@ const sequences: SequenceSource[] = [
     video: '/videos/scroll/compatibility.mp4',
     startTime: 0.12,
     endTime: 6.75,
-    cropLeft: 180,
-    cropRight: 120,
-    cropBottom: 100,
-    focalX: 0.5,
+    cropLeft: 445,
+    cropRight: 160,
+    cropBottom: 160,
+    focalX: 0.48,
   },
   {
     video: '/videos/scroll/distribution.mp4',
     startTime: 0.12,
     endTime: 5.55,
-    cropLeft: 160,
-    cropRight: 120,
-    cropBottom: 100,
-    focalX: 0.5,
+    cropLeft: 310,
+    cropRight: 160,
+    cropBottom: 160,
+    focalX: 0.44,
   },
 ]
 
@@ -111,8 +111,8 @@ function drawVideo(
   if (video.readyState < 2 || !video.videoWidth) return false
   const sourceWidth = SOURCE_WIDTH - sequence.cropLeft - sequence.cropRight
   const sourceHeight = SOURCE_HEIGHT - HEADER_CROP - sequence.cropBottom
-  const visualX = 0
-  const visualWidth = width
+  const visualX = wideLayout ? width * 0.28 : 0
+  const visualWidth = wideLayout ? width * 0.72 : width
   const rect = getCoverRect(
     visualX,
     0,
@@ -121,6 +121,13 @@ function drawVideo(
     sourceWidth / sourceHeight,
     sequence.focalX,
   )
+
+  // Zoom scale to make 3D objects larger & screen filling without text overlap
+  const zoomScale = wideLayout ? 1.28 : 1.15
+  const drawWidth = rect.width * zoomScale
+  const drawHeight = rect.height * zoomScale
+  const drawX = rect.x - (drawWidth - rect.width) * 0.2
+  const drawY = rect.y - (drawHeight - rect.height) * 0.5
 
   context.save()
   context.beginPath()
@@ -134,37 +141,39 @@ function drawVideo(
     HEADER_CROP,
     sourceWidth,
     sourceHeight,
-    rect.x,
-    rect.y,
-    rect.width,
-    rect.height,
+    drawX,
+    drawY,
+    drawWidth,
+    drawHeight,
   )
 
   if (sequence.maskRecordedFrame) {
     context.filter = 'none'
 
-    const leftFade = context.createLinearGradient(0, 0, width * 0.38, 0)
-    leftFade.addColorStop(0, 'rgba(255, 255, 255, 0.96)')
-    leftFade.addColorStop(0.35, 'rgba(255, 255, 255, 0.72)')
-    leftFade.addColorStop(0.75, 'rgba(255, 255, 255, 0.22)')
+    const leftFade = context.createLinearGradient(visualX, 0, width * 0.48, 0)
+    leftFade.addColorStop(0, 'rgba(255, 255, 255, 1)')
+    leftFade.addColorStop(0.3, 'rgba(255, 255, 255, 1)')
+    leftFade.addColorStop(0.7, 'rgba(255, 255, 255, 0.65)')
     leftFade.addColorStop(1, 'rgba(255, 255, 255, 0)')
     context.fillStyle = leftFade
-    context.fillRect(0, 0, width * 0.38, height)
+    context.fillRect(visualX, 0, width * 0.48 - visualX, height)
 
-    const rightFade = context.createLinearGradient(width * 0.92, 0, width, 0)
+    const rightFade = context.createLinearGradient(width * 0.89, 0, width, 0)
     rightFade.addColorStop(0, 'rgba(255, 255, 255, 0)')
-    rightFade.addColorStop(0.6, 'rgba(255, 255, 255, 0.5)')
+    rightFade.addColorStop(0.42, 'rgba(255, 255, 255, 0.5)')
+    rightFade.addColorStop(0.66, 'rgba(255, 255, 255, 1)')
     rightFade.addColorStop(1, 'rgba(255, 255, 255, 1)')
     context.fillStyle = rightFade
-    context.fillRect(width * 0.92, 0, width * 0.08, height)
+    context.fillRect(width * 0.89, 0, width * 0.11, height)
 
-    const bottomFade = context.createLinearGradient(0, height * 0.65, 0, height)
+    const bottomFade = context.createLinearGradient(0, height * 0.55, 0, height)
     bottomFade.addColorStop(0, 'rgba(255, 255, 255, 0)')
-    bottomFade.addColorStop(0.4, 'rgba(255, 255, 255, 0.45)')
-    bottomFade.addColorStop(0.8, 'rgba(255, 255, 255, 0.92)')
+    bottomFade.addColorStop(0.2, 'rgba(255, 255, 255, 0.55)')
+    bottomFade.addColorStop(0.35, 'rgba(255, 255, 255, 0.96)')
+    bottomFade.addColorStop(0.45, 'rgba(255, 255, 255, 1)')
     bottomFade.addColorStop(1, 'rgba(255, 255, 255, 1)')
     context.fillStyle = bottomFade
-    context.fillRect(0, height * 0.65, width, height * 0.35)
+    context.fillRect(visualX, height * 0.55, visualWidth, height * 0.45)
   }
 
   context.restore()
