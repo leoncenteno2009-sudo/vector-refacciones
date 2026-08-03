@@ -2,6 +2,7 @@
 
 import React, { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
+import { Html } from '@react-three/drei'
 import * as THREE from 'three'
 
 interface CompatibilityRingsProps {
@@ -18,25 +19,25 @@ export const CompatibilityRings: React.FC<CompatibilityRingsProps> = ({ progress
     () =>
       new THREE.MeshStandardMaterial({
         color: '#78BDE7',
-        roughness: 0.18,
+        roughness: 0.15,
         metalness: 0.8,
         emissive: '#2A7BB5',
-        emissiveIntensity: 0.5,
+        emissiveIntensity: 0.6,
         transparent: true,
         opacity: 0,
       }),
     []
   )
 
-  // VECTOR Red Selection Material
+  // VECTOR Red Selection Material for Central Rotor Highlight
   const redMatchMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
         color: '#B62025',
-        roughness: 0.15,
+        roughness: 0.1,
         metalness: 0.85,
         emissive: '#86171B',
-        emissiveIntensity: 0.7,
+        emissiveIntensity: 0.85,
         transparent: true,
         opacity: 0,
       }),
@@ -69,7 +70,7 @@ export const CompatibilityRings: React.FC<CompatibilityRingsProps> = ({ progress
 
     blueRingMaterial.opacity = opacity
     redMatchMaterial.opacity = opacity
-    gridLineMaterial.opacity = opacity * 0.4
+    gridLineMaterial.opacity = opacity * 0.5
 
     if (outerRingRef.current) {
       outerRingRef.current.rotation.z = progress * Math.PI * 0.5
@@ -88,13 +89,13 @@ export const CompatibilityRings: React.FC<CompatibilityRingsProps> = ({ progress
   // Blueprint background crosshair grid lines
   const gridPoints = useMemo(() => {
     const pts = []
-    // Horizontal line
-    pts.push(new THREE.Vector3(-4, 0, -0.2), new THREE.Vector3(4, 0, -0.2))
-    // Vertical line
-    pts.push(new THREE.Vector3(0, -3, -0.2), new THREE.Vector3(0, 3, -0.2))
+    pts.push(new THREE.Vector3(-4.5, 0, -0.2), new THREE.Vector3(4.5, 0, -0.2))
+    pts.push(new THREE.Vector3(0, -3.5, -0.2), new THREE.Vector3(0, 3.5, -0.2))
     return pts
   }, [])
   const gridGeom = useMemo(() => new THREE.BufferGeometry().setFromPoints(gridPoints), [gridPoints])
+
+  const showHtml = progress >= 0.24 && progress <= 0.52
 
   return (
     <group position={[0, 0, -0.05]}>
@@ -103,20 +104,13 @@ export const CompatibilityRings: React.FC<CompatibilityRingsProps> = ({ progress
         <mesh material={blueRingMaterial}>
           <torusGeometry args={[2.35, 0.045, 16, 64]} />
         </mesh>
-        {/* Ring ticks */}
-        {Array.from({ length: 8 }).map((_, i) => (
-          <mesh
-            key={i}
-            material={blueRingMaterial}
-            position={[
-              Math.cos((i * Math.PI) / 4) * 2.35,
-              Math.sin((i * Math.PI) / 4) * 2.35,
-              0,
-            ]}
-          >
-            <boxGeometry args={[0.08, 0.02, 0.04]} />
-          </mesh>
-        ))}
+        {showHtml && (
+          <Html position={[0, 2.38, 0]} center distanceFactor={8} zIndexRange={[100, 0]}>
+            <div className="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-bold text-carbon shadow-md border border-steel/20 whitespace-nowrap">
+              Marca: Selección
+            </div>
+          </Html>
+        )}
       </group>
 
       {/* Middle Ring: MODELO */}
@@ -124,13 +118,27 @@ export const CompatibilityRings: React.FC<CompatibilityRingsProps> = ({ progress
         <mesh material={blueRingMaterial}>
           <torusGeometry args={[1.8, 0.04, 16, 64]} />
         </mesh>
+        {showHtml && (
+          <Html position={[0, 1.83, 0]} center distanceFactor={8} zIndexRange={[100, 0]}>
+            <div className="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-bold text-carbon shadow-md border border-steel/20 whitespace-nowrap">
+              Modelo: Selección
+            </div>
+          </Html>
+        )}
       </group>
 
       {/* Inner Ring: AÑO (Highlight Red) */}
       <group ref={innerRingRef}>
         <mesh material={redMatchMaterial}>
-          <torusGeometry args={[1.3, 0.05, 16, 64]} />
+          <torusGeometry args={[1.3, 0.055, 16, 64]} />
         </mesh>
+        {showHtml && (
+          <Html position={[0, 1.33, 0]} center distanceFactor={8} zIndexRange={[100, 0]}>
+            <div className="bg-vector-red text-white px-3 py-1 rounded-full text-[11px] font-bold shadow-md whitespace-nowrap">
+              Año: Coincidencia
+            </div>
+          </Html>
+        )}
       </group>
 
       {/* Blueprint Schematic Grid Lines */}

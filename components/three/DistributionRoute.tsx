@@ -13,28 +13,28 @@ export const DistributionRoute: React.FC<DistributionRouteProps> = ({ progress }
   const part1Ref = useRef<THREE.Group>(null)
   const part2Ref = useRef<THREE.Group>(null)
 
-  // Double-track S-curve route for industrial logistics
+  // S-curve route for industrial logistics track matching Keyframe 03
   const mainCurve = useMemo(() => {
     return new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-4.5, -1.8, -0.8),
-      new THREE.Vector3(-2.0, -0.3, 0),
-      new THREE.Vector3(0, -0.6, 0.4),
-      new THREE.Vector3(2.2, 0.4, -0.2),
-      new THREE.Vector3(4.8, 1.4, -0.9),
+      new THREE.Vector3(-4.8, -1.9, -0.8),
+      new THREE.Vector3(-2.2, -0.4, 0),
+      new THREE.Vector3(0, -0.7, 0.4),
+      new THREE.Vector3(2.4, 0.5, -0.2),
+      new THREE.Vector3(4.9, 1.5, -0.9),
     ])
   }, [])
 
-  const trackTubeGeom = useMemo(() => new THREE.TubeGeometry(mainCurve, 96, 0.08, 10, false), [mainCurve])
+  const trackTubeGeom = useMemo(() => new THREE.TubeGeometry(mainCurve, 96, 0.09, 12, false), [mainCurve])
 
-  // PBR Materials
+  // Photorealistic Red LED Track & Scanner Materials
   const redLedTrackMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
         color: '#B62025',
-        roughness: 0.25,
+        roughness: 0.2,
         metalness: 0.85,
         emissive: '#86171B',
-        emissiveIntensity: 0.75,
+        emissiveIntensity: 0.85,
         transparent: true,
         opacity: 0,
       }),
@@ -44,11 +44,11 @@ export const DistributionRoute: React.FC<DistributionRouteProps> = ({ progress }
   const scannerArchMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#E9E5DC',
-        roughness: 0.2,
+        color: '#F4F1EA',
+        roughness: 0.15,
         metalness: 0.9,
         emissive: '#B62025',
-        emissiveIntensity: 0.6,
+        emissiveIntensity: 0.5,
         transparent: true,
         opacity: 0,
       }),
@@ -58,9 +58,9 @@ export const DistributionRoute: React.FC<DistributionRouteProps> = ({ progress }
   const metallicPartMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#C0C5CC',
-        roughness: 0.3,
-        metalness: 0.88,
+        color: '#CBD5E1',
+        roughness: 0.25,
+        metalness: 0.9,
         transparent: true,
         opacity: 0,
       }),
@@ -105,36 +105,34 @@ export const DistributionRoute: React.FC<DistributionRouteProps> = ({ progress }
 
   return (
     <group ref={routeGroupRef} position={[0, 0, 0]}>
-      {/* Main Red LED Double Track */}
+      {/* Main Red LED Conveyor Track */}
       {/* @ts-ignore */}
       <mesh geometry={trackTubeGeom} material={redLedTrackMat} />
 
-      {/* Industrial Scanner Arch 1 */}
-      <group position={[-2.0, -0.3, 0]} rotation={[0, Math.PI / 4, 0]}>
+      {/* Industrial Scanner Gantry 1 */}
+      <group position={[-2.2, -0.4, 0]} rotation={[0, Math.PI / 4, 0]}>
         <mesh material={scannerArchMat}>
-          <boxGeometry args={[0.1, 1.2, 1.2]} />
+          <boxGeometry args={[0.12, 1.3, 1.3]} />
         </mesh>
       </group>
 
-      {/* Industrial Scanner Arch 2 */}
-      <group position={[2.2, 0.4, -0.2]} rotation={[0, -Math.PI / 6, 0]}>
+      {/* Industrial Scanner Gantry 2 */}
+      <group position={[2.4, 0.5, -0.2]} rotation={[0, -Math.PI / 6, 0]}>
         <mesh material={scannerArchMat}>
-          <boxGeometry args={[0.1, 1.2, 1.2]} />
+          <boxGeometry args={[0.12, 1.3, 1.3]} />
         </mesh>
       </group>
 
       {/* Auto Parts Traveling along Conveyor Track */}
-      {/* Part 1: Vented Brake Rotor */}
-      <group ref={part1Ref} position={[-4.5, -1.8, -0.8]}>
+      <group ref={part1Ref} position={[-4.8, -1.9, -0.8]}>
         <mesh material={metallicPartMat}>
-          <cylinderGeometry args={[0.3, 0.3, 0.08, 24]} />
+          <cylinderGeometry args={[0.32, 0.32, 0.08, 24]} />
         </mesh>
       </group>
 
-      {/* Part 2: Piston Component */}
-      <group ref={part2Ref} position={[-4.5, -1.8, -0.8]}>
+      <group ref={part2Ref} position={[-4.8, -1.9, -0.8]}>
         <mesh material={metallicPartMat}>
-          <cylinderGeometry args={[0.2, 0.2, 0.35, 16]} />
+          <cylinderGeometry args={[0.22, 0.22, 0.38, 16]} />
         </mesh>
       </group>
     </group>

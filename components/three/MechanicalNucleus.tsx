@@ -8,7 +8,7 @@ interface MechanicalNucleusProps {
   progress: number
 }
 
-// Helper to generate a Gear Geometry with teeth
+// Gear Geometry with teeth
 function createGearGeometry(innerRadius: number, outerRadius: number, teeth: number, depth: number) {
   const shape = new THREE.Shape()
   const step = (Math.PI * 2) / teeth
@@ -30,9 +30,8 @@ function createGearGeometry(innerRadius: number, outerRadius: number, teeth: num
     shape.lineTo(Math.cos(a3) * innerRadius, Math.sin(a3) * innerRadius)
   }
 
-  // Center hole
   const holePath = new THREE.Path()
-  holePath.absarc(0, 0, innerRadius * 0.4, 0, Math.PI * 2, true)
+  holePath.absarc(0, 0, innerRadius * 0.45, 0, Math.PI * 2, true)
   shape.holes.push(holePath)
 
   return new THREE.ExtrudeGeometry(shape, {
@@ -44,7 +43,7 @@ function createGearGeometry(innerRadius: number, outerRadius: number, teeth: num
   })
 }
 
-// Helper for Helical Spring Geometry
+// Spring Coil Geometry
 function createSpringGeometry(radius: number, tubeRadius: number, turns: number, height: number) {
   const points: THREE.Vector3[] = []
   const steps = turns * 32
@@ -65,53 +64,54 @@ export const MechanicalNucleus: React.FC<MechanicalNucleusProps> = ({ progress }
   const brakeGroupRef = useRef<THREE.Group>(null)
   const mainGearRef = useRef<THREE.Mesh>(null)
   const secGearRef = useRef<THREE.Mesh>(null)
-  const piston1GroupRef = useRef<THREE.Group>(null)
-  const piston2GroupRef = useRef<THREE.Group>(null)
-  const sparkPlugRef = useRef<THREE.Group>(null)
-  const shockRef = useRef<THREE.Group>(null)
-  const laserLineRef = useRef<THREE.Line>(null)
+  const piston1Ref = useRef<THREE.Group>(null)
+  const piston2Ref = useRef<THREE.Group>(null)
+  const sparkPlug1Ref = useRef<THREE.Group>(null)
+  const sparkPlug2Ref = useRef<THREE.Group>(null)
+  const shock1Ref = useRef<THREE.Group>(null)
+  const shock2Ref = useRef<THREE.Group>(null)
 
   // Geometries
-  const mainGearGeom = useMemo(() => createGearGeometry(0.8, 1.05, 18, 0.18), [])
-  const secGearGeom = useMemo(() => createGearGeometry(0.5, 0.68, 12, 0.15), [])
-  const springGeom = useMemo(() => createSpringGeometry(0.22, 0.04, 6, 1.2), [])
+  const mainGearGeom = useMemo(() => createGearGeometry(0.75, 1.0, 18, 0.16), [])
+  const secGearGeom = useMemo(() => createGearGeometry(0.45, 0.62, 12, 0.14), [])
+  const springGeom = useMemo(() => createSpringGeometry(0.2, 0.035, 6, 1.1), [])
 
-  // High Quality PBR Materials
-  const brushedSteelMat = useMemo(
+  // Photorealistic Metallic Materials
+  const satinSteelMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
         color: '#E2E8F0',
-        roughness: 0.2,
+        roughness: 0.22,
         metalness: 0.95,
       }),
     []
   )
 
-  const darkGraphiteMat = useMemo(
+  const darkGunmetalMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
         color: '#1E293B',
-        roughness: 0.4,
-        metalness: 0.8,
+        roughness: 0.35,
+        metalness: 0.85,
       }),
     []
   )
 
-  const brakeCaliperRedMat = useMemo(
+  const redBrakeMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
         color: '#B62025',
-        roughness: 0.25,
+        roughness: 0.2,
         metalness: 0.7,
       }),
     []
   )
 
-  const ceramicMat = useMemo(
+  const ceramicInsulatorMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
         color: '#FFFFFF',
-        roughness: 0.1,
+        roughness: 0.12,
         metalness: 0.05,
       }),
     []
@@ -120,112 +120,106 @@ export const MechanicalNucleus: React.FC<MechanicalNucleusProps> = ({ progress }
   const copperMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#F59E0B',
-        roughness: 0.3,
+        color: '#D97706',
+        roughness: 0.28,
         metalness: 0.9,
       }),
     []
   )
 
-  const laserMat = useMemo(
+  const laserRedMat = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
         color: '#B62025',
         transparent: true,
-        opacity: 0.95,
+        opacity: 0.9,
       }),
     []
   )
 
-  // Frame Interpolation with continuous micro-idle movement
+  // Motion & Animation Frame Loop
   useFrame((state) => {
     if (!groupRef.current) return
 
-    const elapsedTime = state.clock.getElapsedTime()
+    const t = state.clock.getElapsedTime()
 
-    // Continuous subtle gear rotation even at rest
-    if (mainGearRef.current) {
-      mainGearRef.current.rotation.z = elapsedTime * 0.3 + progress * Math.PI * 0.8
-    }
-    if (secGearRef.current) {
-      secGearRef.current.rotation.z = -elapsedTime * 0.45 - progress * Math.PI * 1.2
-    }
+    // Smooth baseline idle spin for gears & mechanical cluster
+    if (mainGearRef.current) mainGearRef.current.rotation.z = t * 0.35 + progress * Math.PI * 0.8
+    if (secGearRef.current) secGearRef.current.rotation.z = -t * 0.5 - progress * Math.PI * 1.2
 
-    // Baseline axial group rotation
     groupRef.current.rotation.y = THREE.MathUtils.lerp(
       groupRef.current.rotation.y,
-      progress * Math.PI * 0.4 + Math.sin(elapsedTime * 0.5) * 0.04,
+      progress * Math.PI * 0.35 + Math.sin(t * 0.4) * 0.03,
       0.08
     )
 
-    // State 01: Exploded View (0 - 0.24)
-    // State 02: Compatibility Rings & Concentric Focus (0.24 - 0.50)
-    // State 03: Logistics Track Alignment (0.50 - 0.76)
-    // State 04: Silhouette Assembly (0.76 - 1.0)
+    // State 01 Keyframe Alignment (0 - 0.24):
+    // Central Brake Disc as anchor, components suspended along red laser line
     if (progress <= 0.24) {
       const p = progress / 0.24
       if (brakeGroupRef.current) {
-        brakeGroupRef.current.rotation.z = p * Math.PI * 0.6
+        brakeGroupRef.current.rotation.z = p * Math.PI * 0.5
         brakeGroupRef.current.position.set(0, 0, 0)
       }
-      if (mainGearRef.current) mainGearRef.current.position.set(1.7 - p * 0.5, 0.7 - p * 0.2, 0)
-      if (secGearRef.current) secGearRef.current.position.set(2.4 - p * 0.6, 0.2 - p * 0.1, -0.2)
-      if (piston1GroupRef.current)
-        piston1GroupRef.current.position.set(-1.8 + p * 0.5, -0.8 + p * 0.3 + Math.sin(elapsedTime * 2) * 0.03, 0.1)
-      if (piston2GroupRef.current)
-        piston2GroupRef.current.position.set(-2.4 + p * 0.7, 0.9 - p * 0.4 + Math.cos(elapsedTime * 2) * 0.03, -0.3)
-      if (shockRef.current) shockRef.current.position.set(0.8 - p * 0.2, -1.6 + p * 0.5, 0.2)
+      if (mainGearRef.current) mainGearRef.current.position.set(1.45 - p * 0.4, 0.55 - p * 0.15, 0)
+      if (secGearRef.current) secGearRef.current.position.set(2.1 - p * 0.5, 0.15 - p * 0.1, -0.15)
+      if (piston1Ref.current)
+        piston1Ref.current.position.set(-1.6 + p * 0.4, -0.65 + p * 0.2 + Math.sin(t * 1.5) * 0.02, 0.1)
+      if (piston2Ref.current)
+        piston2Ref.current.position.set(-2.2 + p * 0.6, 0.75 - p * 0.3 + Math.cos(t * 1.5) * 0.02, -0.2)
+      if (sparkPlug1Ref.current) sparkPlug1Ref.current.position.set(1.6 - p * 0.3, 1.45 - p * 0.3, -0.1)
+      if (sparkPlug2Ref.current) sparkPlug2Ref.current.position.set(-1.5 + p * 0.3, -1.5 + p * 0.3, 0.1)
+      if (shock1Ref.current) shock1Ref.current.position.set(0.7 - p * 0.15, -1.45 + p * 0.4, 0.15)
     } else if (progress <= 0.5) {
+      // State 02: Compatibility Rings & Concentric Focus
       const p = (progress - 0.24) / 0.26
-      if (mainGearRef.current) {
-        mainGearRef.current.position.set(1.2 - p * 0.5, 0.5 - p * 0.3, 0)
-      }
-      if (piston1GroupRef.current) {
-        piston1GroupRef.current.position.set(-1.3 + p * 0.6, -0.5 + p * 0.3, 0)
-      }
+      if (mainGearRef.current) mainGearRef.current.position.set(1.05 - p * 0.4, 0.4 - p * 0.2, 0)
+      if (piston1Ref.current) piston1Ref.current.position.set(-1.2 + p * 0.5, -0.45 + p * 0.2, 0)
     } else if (progress <= 0.76) {
+      // State 03: Logistics Track Alignment
       const p = (progress - 0.5) / 0.26
       if (groupRef.current) {
-        groupRef.current.position.x = THREE.MathUtils.lerp(0, -0.6, p)
-        groupRef.current.position.y = THREE.MathUtils.lerp(0, 0.3, p)
+        groupRef.current.position.x = THREE.MathUtils.lerp(0, -0.5, p)
+        groupRef.current.position.y = THREE.MathUtils.lerp(0, 0.25, p)
       }
     } else {
+      // State 04: Silhouette Assembly
       const p = (progress - 0.76) / 0.24
       if (groupRef.current) {
-        groupRef.current.position.x = THREE.MathUtils.lerp(-0.6, 0.25, p)
-        groupRef.current.scale.setScalar(THREE.MathUtils.lerp(1, 0.82, p))
+        groupRef.current.position.x = THREE.MathUtils.lerp(-0.5, 0.2, p)
+        groupRef.current.scale.setScalar(THREE.MathUtils.lerp(1, 0.85, p))
       }
     }
   })
 
-  // Red laser axis line
-  const laserPoints = useMemo(
-    () => [
-      new THREE.Vector3(-4.5, -2.2, 0),
-      new THREE.Vector3(-1.8, -0.8, 0),
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(1.8, 0.9, 0),
-      new THREE.Vector3(4.5, 2.2, 0),
-    ],
+  // Diagonal Red VECTOR Laser Lines crossing axial center as in Keyframe 01
+  const laserPoints1 = useMemo(
+    () => [new THREE.Vector3(-4.2, -2.1, 0), new THREE.Vector3(4.2, 2.1, 0)],
     []
   )
-  const laserGeom = useMemo(() => new THREE.BufferGeometry().setFromPoints(laserPoints), [laserPoints])
+  const laserPoints2 = useMemo(
+    () => [new THREE.Vector3(-3.8, 1.9, 0), new THREE.Vector3(3.8, -1.9, 0)],
+    []
+  )
+
+  const laserGeom1 = useMemo(() => new THREE.BufferGeometry().setFromPoints(laserPoints1), [laserPoints1])
+  const laserGeom2 = useMemo(() => new THREE.BufferGeometry().setFromPoints(laserPoints2), [laserPoints2])
 
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
-      {/* 1. CENTRAL VENTED BRAKE DISC & RED CALIPER */}
+      {/* 1. CENTRAL VENTED BRAKE ROTOR & CALIPER (Keyframe 01 Anchor) */}
       <group ref={brakeGroupRef}>
         {/* Outer Vented Disc */}
-        <mesh material={brushedSteelMat}>
-          <cylinderGeometry args={[1.35, 1.35, 0.08, 48]} />
+        <mesh material={satinSteelMat}>
+          <cylinderGeometry args={[1.3, 1.3, 0.08, 48]} />
         </mesh>
-        {/* Vented Center Gap */}
-        <mesh material={darkGraphiteMat} position={[0, 0, 0]}>
-          <cylinderGeometry args={[1.3, 1.3, 0.04, 48]} />
+        {/* Vented Inner Core */}
+        <mesh material={darkGunmetalMat} position={[0, 0, 0]}>
+          <cylinderGeometry args={[1.25, 1.25, 0.04, 48]} />
         </mesh>
-        {/* Inner Hat */}
-        <mesh material={darkGraphiteMat} position={[0, 0, 0.07]}>
-          <cylinderGeometry args={[0.55, 0.55, 0.12, 32]} />
+        {/* Center Mounting Hat */}
+        <mesh material={darkGunmetalMat} position={[0, 0, 0.07]}>
+          <cylinderGeometry args={[0.5, 0.5, 0.12, 32]} />
         </mesh>
 
         {/* Cross-Drilled Holes */}
@@ -234,96 +228,90 @@ export const MechanicalNucleus: React.FC<MechanicalNucleusProps> = ({ progress }
           return (
             <mesh
               key={i}
-              material={darkGraphiteMat}
-              position={[Math.cos(angle) * 0.95, Math.sin(angle) * 0.95, 0.05]}
+              material={darkGunmetalMat}
+              position={[Math.cos(angle) * 0.9, Math.sin(angle) * 0.9, 0.05]}
             >
-              <cylinderGeometry args={[0.045, 0.045, 0.14, 12]} />
+              <cylinderGeometry args={[0.04, 0.04, 0.14, 12]} />
             </mesh>
           )
         })}
 
         {/* High-Performance Red Brake Caliper */}
-        <group position={[0.95, 0.65, 0.08]} rotation={[0, 0, -Math.PI / 4]}>
-          <mesh material={brakeCaliperRedMat}>
-            <boxGeometry args={[0.6, 0.75, 0.32]} />
+        <group position={[0.9, 0.6, 0.08]} rotation={[0, 0, -Math.PI / 4]}>
+          <mesh material={redBrakeMat}>
+            <boxGeometry args={[0.55, 0.7, 0.3]} />
           </mesh>
-          {/* Caliper Pistons detail */}
-          <mesh material={brushedSteelMat} position={[-0.15, 0, 0.12]}>
-            <cylinderGeometry args={[0.12, 0.12, 0.1, 16]} />
+          <mesh material={satinSteelMat} position={[-0.15, 0, 0.12]}>
+            <cylinderGeometry args={[0.11, 0.11, 0.1, 16]} />
           </mesh>
         </group>
       </group>
 
-      {/* 2. MAIN & SECONDARY GEARS WITH REAL TEETH */}
-      <mesh ref={mainGearRef} geometry={mainGearGeom} material={brushedSteelMat} position={[1.7, 0.7, 0]} />
-      <mesh ref={secGearRef} geometry={secGearGeom} material={darkGraphiteMat} position={[2.4, 0.2, -0.2]} />
+      {/* 2. GEARS (Main & Secondary) */}
+      <mesh ref={mainGearRef} geometry={mainGearGeom} material={satinSteelMat} position={[1.45, 0.55, 0]} />
+      <mesh ref={secGearRef} geometry={secGearGeom} material={darkGunmetalMat} position={[2.1, 0.15, -0.15]} />
 
-      {/* 3. MULTI-STAGE PISTONS WITH CONNECTING RODS */}
-      <group ref={piston1GroupRef} position={[-1.8, -0.8, 0.1]}>
-        {/* Piston Crown */}
-        <mesh material={brushedSteelMat}>
-          <cylinderGeometry args={[0.32, 0.32, 0.45, 24]} />
+      {/* 3. PISTONS WITH CONNECTING RODS */}
+      <group ref={piston1Ref} position={[-1.6, -0.65, 0.1]}>
+        <mesh material={satinSteelMat}>
+          <cylinderGeometry args={[0.3, 0.3, 0.42, 24]} />
         </mesh>
-        {/* Piston Rings */}
-        <mesh material={darkGraphiteMat} position={[0, 0.1, 0]}>
-          <cylinderGeometry args={[0.33, 0.33, 0.03, 24]} />
+        <mesh material={darkGunmetalMat} position={[0, 0.09, 0]}>
+          <cylinderGeometry args={[0.31, 0.31, 0.03, 24]} />
         </mesh>
-        {/* Connecting Rod */}
-        <mesh material={darkGraphiteMat} position={[0.2, -0.45, 0]} rotation={[0, 0, -Math.PI / 6]}>
-          <boxGeometry args={[0.12, 0.65, 0.08]} />
+        <mesh material={darkGunmetalMat} position={[0.2, -0.4, 0]} rotation={[0, 0, -Math.PI / 6]}>
+          <boxGeometry args={[0.11, 0.6, 0.07]} />
         </mesh>
       </group>
 
-      <group ref={piston2GroupRef} position={[-2.4, 0.9, -0.3]}>
-        <mesh material={brushedSteelMat}>
-          <cylinderGeometry args={[0.28, 0.28, 0.4, 24]} />
+      <group ref={piston2Ref} position={[-2.2, 0.75, -0.2]}>
+        <mesh material={satinSteelMat}>
+          <cylinderGeometry args={[0.26, 0.26, 0.38, 24]} />
         </mesh>
-        <mesh material={darkGraphiteMat} position={[0.15, -0.4, 0]} rotation={[0, 0, Math.PI / 8]}>
-          <boxGeometry args={[0.1, 0.55, 0.07]} />
+        <mesh material={darkGunmetalMat} position={[0.15, -0.38, 0]} rotation={[0, 0, Math.PI / 8]}>
+          <boxGeometry args={[0.09, 0.5, 0.06]} />
         </mesh>
       </group>
 
-      {/* 4. SPARK PLUG WITH CERAMIC INSULATOR & COPPER TIP */}
-      <group ref={sparkPlugRef} position={[0.3, 1.6, -0.15]} rotation={[0, 0, Math.PI / 3]}>
-        {/* White Ceramic Insulator */}
-        <mesh material={ceramicMat}>
-          <cylinderGeometry args={[0.09, 0.09, 0.7, 16]} />
+      {/* 4. SPARK PLUGS */}
+      <group ref={sparkPlug1Ref} position={[1.6, 1.45, -0.1]} rotation={[0, 0, -Math.PI / 4]}>
+        <mesh material={ceramicInsulatorMat}>
+          <cylinderGeometry args={[0.08, 0.08, 0.65, 16]} />
         </mesh>
-        {/* Metal Hex Nut */}
-        <mesh material={brushedSteelMat} position={[0, -0.45, 0]}>
-          <cylinderGeometry args={[0.14, 0.14, 0.2, 6]} />
+        <mesh material={satinSteelMat} position={[0, -0.4, 0]}>
+          <cylinderGeometry args={[0.12, 0.12, 0.18, 6]} />
         </mesh>
-        {/* Thread Body */}
-        <mesh material={darkGraphiteMat} position={[0, -0.65, 0]}>
-          <cylinderGeometry args={[0.11, 0.11, 0.25, 16]} />
-        </mesh>
-        {/* Copper Electrode Tip */}
-        <mesh material={copperMat} position={[0, -0.82, 0]}>
+        <mesh material={copperMat} position={[0, -0.75, 0]}>
           <cylinderGeometry args={[0.02, 0.02, 0.1, 8]} />
         </mesh>
       </group>
 
-      {/* 5. SUSPENSION SHOCK ABSORBER WITH HELICAL SPRING */}
-      <group ref={shockRef} position={[0.8, -1.6, 0.2]} rotation={[0, 0, -Math.PI / 6]}>
-        {/* Central Damper Rod */}
-        <mesh material={brushedSteelMat}>
-          <cylinderGeometry args={[0.06, 0.06, 1.4, 16]} />
+      <group ref={sparkPlug2Ref} position={[-1.5, -1.5, 0.1]} rotation={[0, 0, Math.PI / 3]}>
+        <mesh material={ceramicInsulatorMat}>
+          <cylinderGeometry args={[0.08, 0.08, 0.65, 16]} />
         </mesh>
-        {/* Helical Spring Coil */}
-        {/* @ts-ignore */}
-        <mesh geometry={springGeom} material={brakeCaliperRedMat} />
-        {/* Top/Bottom Spring Seats */}
-        <mesh material={darkGraphiteMat} position={[0, 0.65, 0]}>
-          <cylinderGeometry args={[0.26, 0.26, 0.08, 24]} />
-        </mesh>
-        <mesh material={darkGraphiteMat} position={[0, -0.65, 0]}>
-          <cylinderGeometry args={[0.26, 0.26, 0.08, 24]} />
+        <mesh material={satinSteelMat} position={[0, -0.4, 0]}>
+          <cylinderGeometry args={[0.12, 0.12, 0.18, 6]} />
         </mesh>
       </group>
 
-      {/* 6. RED VECTOR AXIAL LASER LINE */}
+      {/* 5. SUSPENSION SHOCK ABSORBERS */}
+      <group ref={shock1Ref} position={[0.7, -1.45, 0.15]} rotation={[0, 0, -Math.PI / 5]}>
+        <mesh material={satinSteelMat}>
+          <cylinderGeometry args={[0.055, 0.055, 1.3, 16]} />
+        </mesh>
+        {/* @ts-ignore */}
+        <mesh geometry={springGeom} material={redBrakeMat} />
+        <mesh material={darkGunmetalMat} position={[0, 0.6, 0]}>
+          <cylinderGeometry args={[0.24, 0.24, 0.07, 24]} />
+        </mesh>
+      </group>
+
+      {/* 6. RED VECTOR LASER LINES (Keyframe 01 Exact Aesthetic) */}
       {/* @ts-ignore */}
-      <line ref={laserLineRef} geometry={laserGeom} material={laserMat} />
+      <line geometry={laserGeom1} material={laserRedMat} />
+      {/* @ts-ignore */}
+      <line geometry={laserGeom2} material={laserRedMat} />
     </group>
   )
 }
