@@ -58,7 +58,6 @@ body {
 
 .vector-story__media,
 .vector-story__canvas,
-.vector-story__fallback-image,
 .vector-story__vignette,
 .vector-story__grain,
 .vector-story__scanner {
@@ -74,13 +73,6 @@ body {
 }
 
 .is-dark .vector-story__media { background: #080b10; }
-
-.vector-story__fallback-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-}
 
 .vector-story__canvas {
   z-index: 1;
@@ -125,7 +117,7 @@ body {
 
 .stage-copy {
   width: min(510px, 36vw);
-  animation: stage-enter 780ms cubic-bezier(.16, 1, .3, 1) both;
+  animation: stage-enter 920ms cubic-bezier(.16, 1, .3, 1) both;
 }
 
 .stage-copy__eyebrow {
@@ -276,7 +268,7 @@ body {
 .vector-story__scroll-hint i::after { content: ''; position: absolute; inset: 0; background: var(--color-vector-red); animation: scroll-hint 1.8s ease-in-out infinite; }
 
 @keyframes stage-enter {
-  from { opacity: 0; transform: translateY(26px); filter: blur(7px); }
+  from { opacity: 0; transform: translateY(20px); filter: blur(4px); }
   to { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
 
@@ -294,7 +286,6 @@ body {
   .vector-story { height: 420vh; }
   .vector-story__sticky { min-height: 640px; }
   .vector-story__content { padding: 96px 28px 50px; align-items: flex-end; }
-  .vector-story__fallback-image { object-position: 64% center; }
   .vector-story__vignette {
     background:
       linear-gradient(180deg, rgba(244,240,232,.05) 20%, rgba(244,240,232,.44) 52%, rgba(244,240,232,.98) 73%),
@@ -311,8 +302,7 @@ body {
   .vector-story { height: 390vh; }
   .vector-story__sticky { min-height: 620px; }
   .vector-story__content { padding: 88px 20px 34px; }
-  .vector-story__canvas,
-  .vector-story__fallback-image { height: 62%; object-position: 67% top; }
+  .vector-story__canvas { height: 62%; }
   .vector-story__media { background: #f4f0e8; }
   .vector-story__vignette { background: linear-gradient(180deg, transparent 10%, rgba(244,240,232,.06) 37%, #f4f0e8 60%, #f4f0e8 100%); }
   .is-dark .vector-story__vignette { background: linear-gradient(180deg, transparent 8%, rgba(8,11,16,.12) 38%, #080b10 63%, #080b10 100%); }

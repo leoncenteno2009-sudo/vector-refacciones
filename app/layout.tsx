@@ -3,6 +3,7 @@ import { siteConfig } from '@/config/site.config'
 import './globals.css'
 
 const baseUrl = 'https://leoncenteno2009-sudo.github.io/vector-refacciones/'
+const assetBasePath = process.env.NODE_ENV === 'production' ? '/vector-refacciones' : ''
 
 export const metadata: Metadata = {
   title: `${siteConfig.name} | ${siteConfig.descriptor}`,
@@ -48,6 +49,12 @@ export default function RootLayout({
   return (
     <html lang="es-MX" className="scroll-smooth">
       <head>
+        <link
+          rel="preload"
+          href={`${assetBasePath}/videos/scroll/hero.mp4`}
+          as="video"
+          type="video/mp4"
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

@@ -3,7 +3,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { getAssetPath } from '@/lib/utils'
 import { CinematicScrollCanvas } from './CinematicScrollCanvas'
 import { ScrollStageCopy } from './ScrollStageCopy'
 import { ScrollProgress } from './ScrollProgress'
@@ -25,7 +24,7 @@ export const VectorScrollStory: React.FC = () => {
         trigger: containerRef.current,
         start: 'top top',
         end: 'bottom bottom',
-        scrub: 0.35,
+        scrub: 0.6,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
           const { progress, direction } = self
@@ -54,14 +53,6 @@ export const VectorScrollStory: React.FC = () => {
     >
       <div ref={stickyRef} className="vector-story__sticky">
         <div className="vector-story__media" aria-hidden="true">
-          <img
-            src={getAssetPath('/images/scroll/vector-stage-01.jpg')}
-            alt=""
-            width={1672}
-            height={941}
-            fetchPriority="high"
-            className="vector-story__fallback-image"
-          />
           <CinematicScrollCanvas progressRef={progressRef} />
           <div className="vector-story__vignette" />
           <div className="vector-story__scanner" />

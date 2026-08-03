@@ -13,6 +13,7 @@ export const Header: React.FC = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
     }
+    handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -38,8 +39,8 @@ export const Header: React.FC = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 h-[80px] flex items-center ${
         scrolled
-          ? 'bg-ivory-100/90 backdrop-blur-md border-b border-carbon/10 shadow-sm'
-          : 'bg-ivory-100'
+          ? 'bg-ivory-100/40 backdrop-blur-sm border-b border-carbon/10 shadow-[0_8px_30px_rgba(23,23,23,0.04)]'
+          : 'bg-ivory-100/10 border-b border-transparent'
       }`}
     >
       <div className="max-w-site w-full mx-auto px-5 md:px-8 lg:px-12 flex items-center justify-between">

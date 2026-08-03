@@ -9,7 +9,6 @@ interface CinematicScrollCanvasProps {
 
 interface SequenceSource {
   video: string
-  poster: string
   startTime: number
   endTime: number
   cropLeft: number
@@ -26,7 +25,6 @@ const SOURCE_HEIGHT = 720
 const sequences: SequenceSource[] = [
   {
     video: '/videos/scroll/hero.mp4',
-    poster: '/images/scroll/vector-stage-01.jpg',
     startTime: 0.12,
     endTime: 5.65,
     cropLeft: 520,
@@ -37,7 +35,6 @@ const sequences: SequenceSource[] = [
   },
   {
     video: '/videos/scroll/compatibility.mp4',
-    poster: '/images/scroll/vector-stage-02.jpg',
     startTime: 0.12,
     endTime: 6.75,
     cropLeft: 445,
@@ -47,7 +44,6 @@ const sequences: SequenceSource[] = [
   },
   {
     video: '/videos/scroll/distribution.mp4',
-    poster: '/images/scroll/vector-stage-03.jpg',
     startTime: 0.12,
     endTime: 5.55,
     cropLeft: 310,
@@ -66,14 +62,17 @@ const smoothstep = (value: number) => {
 
 function getStageOpacity(progress: number, index: number) {
   const stageLength = 1 / sequences.length
-  const transition = 0.026
+  const transition = 0.052
+  const neutralGap = 0.007
   const start = index * stageLength
   const end = start + stageLength
 
-  const fadeIn = index === 0 ? 1 : smoothstep((progress - start) / transition)
+  const fadeIn = index === 0
+    ? 1
+    : smoothstep((progress - (start + neutralGap)) / transition)
   const fadeOut = index === sequences.length - 1
     ? 1
-    : 1 - smoothstep((progress - (end - transition)) / transition)
+    : 1 - smoothstep((progress - (end - transition - neutralGap)) / transition)
   return Math.min(fadeIn, fadeOut)
 }
 
@@ -98,21 +97,6 @@ function getCoverRect(
     width: drawWidth,
     height: drawHeight,
   }
-}
-
-function drawPoster(
-  context: CanvasRenderingContext2D,
-  poster: HTMLImageElement,
-  width: number,
-  height: number,
-  opacity: number,
-) {
-  if (!poster.complete || !poster.naturalWidth) return
-  const rect = getCoverRect(0, 0, width, height, poster.naturalWidth / poster.naturalHeight)
-  context.save()
-  context.globalAlpha = opacity
-  context.drawImage(poster, rect.x, rect.y, rect.width, rect.height)
-  context.restore()
 }
 
 function drawVideo(
@@ -199,13 +183,6 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
     const context = canvas.getContext('2d', { alpha: false })
     if (!context) return
 
-    const posters = sequences.map(({ poster }) => {
-      const image = new Image()
-      image.decoding = 'async'
-      image.src = getAssetPath(poster)
-      return image
-    })
-
     const videos = sequences.map(({ video }) => {
       const element = document.createElement('video')
       element.muted = true
@@ -224,12 +201,12 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
     let lastHeight = 0
     let isDisposed = false
     const visibleSequences = sequences.map(() => false)
+    const initializedSequences = sequences.map(() => false)
 
     const invalidate = () => {
       lastProgress = -1
     }
 
-    posters.forEach((poster) => poster.addEventListener('load', invalidate))
     videos.forEach((video) => {
       video.addEventListener('loadeddata', invalidate)
     })
@@ -250,8 +227,9 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
         const video = videos[index]
         const isVisible = getStageOpacity(progress, index) > 0.002
 
-        if (isVisible && !visibleSequences[index] && video.readyState >= 1) {
+        if (!initializedSequences[index] && video.readyState >= 1) {
           video.currentTime = sequence.startTime
+          initializedSequences[index] = true
         }
 
         if (isVisible && video.readyState >= 2) {
@@ -276,9 +254,7 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
         sequences.forEach((sequence, index) => {
           const opacity = getStageOpacity(progress, index)
           if (opacity <= 0.002) return
-          if (!drawVideo(context, videos[index], width, height, opacity, sequence, wideLayout)) {
-            drawPoster(context, posters[index], width, height, opacity)
-          }
+          drawVideo(context, videos[index], width, height, opacity, sequence, wideLayout)
         })
 
         const activeSequence = sequences[stage]
@@ -303,7 +279,6 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
     return () => {
       isDisposed = true
       window.cancelAnimationFrame(animationFrame)
-      posters.forEach((poster) => poster.removeEventListener('load', invalidate))
       videos.forEach((video) => {
         video.removeEventListener('loadeddata', invalidate)
         video.pause()
