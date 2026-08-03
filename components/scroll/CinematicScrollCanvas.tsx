@@ -13,6 +13,37 @@ const imageSources = [
   '/images/scroll/vector-stage-02.jpg',
   '/images/scroll/vector-stage-03.jpg',
   '/images/scroll/vector-stage-04.jpg',
+  '/images/scroll/mechanical-assembly-layer.png',
+  '/images/scroll/distribution-parts-layer.png',
+]
+
+interface SpriteDefinition {
+  source: [number, number, number, number]
+  offset: [number, number]
+  rotation: number
+  delay: number
+}
+
+const mechanicalSprites: SpriteDefinition[] = [
+  { source: [82, 230, 210, 470], offset: [-0.2, 0.02], rotation: -0.26, delay: 0.04 },
+  { source: [278, 102, 220, 175], offset: [-0.12, -0.18], rotation: -0.42, delay: 0.18 },
+  { source: [278, 354, 195, 240], offset: [-0.15, 0.12], rotation: -0.5, delay: 0.09 },
+  { source: [445, 300, 230, 315], offset: [-0.09, 0.02], rotation: -0.36, delay: 0.13 },
+  { source: [650, 195, 390, 525], offset: [0, 0.2], rotation: 0.2, delay: 0 },
+  { source: [1028, 300, 230, 315], offset: [0.1, 0.02], rotation: 0.38, delay: 0.13 },
+  { source: [1230, 354, 195, 240], offset: [0.16, 0.12], rotation: 0.52, delay: 0.09 },
+  { source: [1420, 230, 205, 470], offset: [0.2, 0.02], rotation: 0.27, delay: 0.04 },
+  { source: [330, 650, 200, 155], offset: [-0.12, 0.17], rotation: -0.42, delay: 0.2 },
+  { source: [1190, 650, 200, 155], offset: [0.12, 0.17], rotation: 0.42, delay: 0.2 },
+]
+
+const distributionSprites: Array<[number, number, number, number]> = [
+  [20, 320, 315, 330],
+  [365, 300, 165, 355],
+  [560, 330, 290, 320],
+  [875, 325, 295, 330],
+  [1180, 345, 275, 300],
+  [1450, 370, 205, 250],
 ]
 
 const clamp = (value: number) => Math.min(1, Math.max(0, value))
@@ -70,6 +101,103 @@ function drawImageLayer(
   context.globalAlpha = opacity
   context.filter = `saturate(${1.02 + opacity * 0.05}) contrast(${1.015 + opacity * 0.025})`
   context.drawImage(image, rect.x + drift * width * 0.038, rect.y - drift * height * 0.014, rect.width, rect.height)
+  context.restore()
+}
+
+function drawTechnicalBackdrop(
+  context: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  opacity: number,
+) {
+  context.save()
+  context.globalAlpha = opacity
+  const gradient = context.createRadialGradient(width * 0.7, height * 0.47, 0, width * 0.7, height * 0.47, width * 0.74)
+  gradient.addColorStop(0, '#fffdf8')
+  gradient.addColorStop(0.58, '#f5f1e9')
+  gradient.addColorStop(1, '#e9e3d8')
+  context.fillStyle = gradient
+  context.fillRect(0, 0, width, height)
+
+  context.strokeStyle = 'rgba(67,58,48,.075)'
+  context.lineWidth = Math.max(1, height * 0.0008)
+  const spacing = Math.max(110, width * 0.14)
+  for (let x = width * 0.34; x < width + spacing; x += spacing) {
+    context.beginPath()
+    context.moveTo(x, 0)
+    context.lineTo(x, height)
+    context.stroke()
+  }
+  for (let y = height * 0.12; y < height + spacing; y += spacing) {
+    context.beginPath()
+    context.moveTo(width * 0.3, y)
+    context.lineTo(width, y)
+    context.stroke()
+  }
+  context.restore()
+}
+
+function drawMechanicalAssembly(
+  context: CanvasRenderingContext2D,
+  image: HTMLImageElement,
+  width: number,
+  height: number,
+  progress: number,
+  opacity: number,
+) {
+  const sourceWidth = image.naturalWidth
+  const sourceHeight = image.naturalHeight
+  const isCompact = width < 700
+  const destinationHeight = isCompact ? height * 0.7 : height * 0.66
+  const destinationWidth = destinationHeight * (sourceWidth / sourceHeight)
+  const destinationX = isCompact ? width * -0.58 : width * 0.39
+  const destinationY = isCompact ? height * 0.03 : height * 0.12
+
+  mechanicalSprites.forEach((sprite) => {
+    const [sourceX, sourceY, sourcePartWidth, sourcePartHeight] = sprite.source
+    const travel = smoothstep((progress - sprite.delay) / Math.max(0.001, 0.72 - sprite.delay))
+    const destinationPartX = destinationX + (sourceX / sourceWidth) * destinationWidth
+    const destinationPartY = destinationY + (sourceY / sourceHeight) * destinationHeight
+    const destinationPartWidth = (sourcePartWidth / sourceWidth) * destinationWidth
+    const destinationPartHeight = (sourcePartHeight / sourceHeight) * destinationHeight
+    const offsetX = sprite.offset[0] * width * (1 - travel)
+    const offsetY = sprite.offset[1] * height * (1 - travel)
+    const centerX = destinationPartX + destinationPartWidth / 2 + offsetX
+    const centerY = destinationPartY + destinationPartHeight / 2 + offsetY
+
+    context.save()
+    context.globalAlpha = opacity * (0.55 + travel * 0.45)
+    context.translate(centerX, centerY)
+    context.rotate(sprite.rotation * (1 - travel))
+    context.scale(0.72 + travel * 0.28, 0.72 + travel * 0.28)
+    context.shadowColor = 'rgba(38,30,23,.24)'
+    context.shadowBlur = height * 0.018 * travel
+    context.drawImage(
+      image,
+      sourceX,
+      sourceY,
+      sourcePartWidth,
+      sourcePartHeight,
+      -destinationPartWidth / 2,
+      -destinationPartHeight / 2,
+      destinationPartWidth,
+      destinationPartHeight,
+    )
+    context.restore()
+  })
+
+  const cx = isCompact ? width * 0.64 : width * 0.695
+  const cy = isCompact ? height * 0.42 : height * 0.5
+  const unit = Math.min(width, height)
+  context.save()
+  context.translate(cx, cy)
+  context.rotate(progress * Math.PI * 1.45)
+  strokeGlow(context, '#c8252b', Math.max(1.5, unit * 0.0026), unit * 0.022, opacity * 0.82)
+  context.setLineDash([unit * 0.042, unit * 0.022])
+  context.lineDashOffset = -progress * unit * 0.52
+  context.beginPath()
+  context.arc(0, 0, unit * (isCompact ? 0.31 : 0.205), -0.2, Math.PI * 1.62)
+  context.stroke()
   context.restore()
 }
 
@@ -176,6 +304,85 @@ function distributionPath(context: CanvasRenderingContext2D, width: number, heig
   context.bezierCurveTo(width * 0.54, height * 0.46, width * 0.52, height * 0.7, width * 0.88, height * 0.82)
 }
 
+function cubicPoint(
+  start: [number, number],
+  controlA: [number, number],
+  controlB: [number, number],
+  end: [number, number],
+  t: number,
+) {
+  const inverse = 1 - t
+  return {
+    x: inverse ** 3 * start[0] + 3 * inverse ** 2 * t * controlA[0] + 3 * inverse * t ** 2 * controlB[0] + t ** 3 * end[0],
+    y: inverse ** 3 * start[1] + 3 * inverse ** 2 * t * controlA[1] + 3 * inverse * t ** 2 * controlB[1] + t ** 3 * end[1],
+  }
+}
+
+function conveyorPoint(width: number, height: number, progress: number) {
+  if (progress < 0.5) {
+    const t = progress * 2
+    return cubicPoint(
+      [width * 0.54, height * 0.18],
+      [width * 0.88, height * 0.1],
+      [width * 0.92, height * 0.38],
+      [width * 0.72, height * 0.42],
+      t,
+    )
+  }
+  const t = (progress - 0.5) * 2
+  return cubicPoint(
+    [width * 0.72, height * 0.42],
+    [width * 0.54, height * 0.46],
+    [width * 0.52, height * 0.7],
+    [width * 0.88, height * 0.82],
+    t,
+  )
+}
+
+function drawDistributionParts(
+  context: CanvasRenderingContext2D,
+  image: HTMLImageElement,
+  width: number,
+  height: number,
+  progress: number,
+  opacity: number,
+) {
+  const sourceWidth = image.naturalWidth
+  const sourceHeight = image.naturalHeight
+  const unit = Math.min(width, height)
+
+  distributionSprites.forEach(([sourceX, sourceY, sourcePartWidth, sourcePartHeight], index) => {
+    const pathProgress = (progress * 1.18 + index * 0.164) % 1
+    const point = conveyorPoint(width, height, pathProgress)
+    const nextPoint = conveyorPoint(width, height, (pathProgress + 0.008) % 1)
+    const angle = Math.atan2(nextPoint.y - point.y, nextPoint.x - point.x)
+    const naturalRatio = sourcePartWidth / sourcePartHeight
+    const destinationHeight = unit * (index === 0 ? 0.12 : 0.085)
+    const destinationWidth = destinationHeight * naturalRatio
+    const pulse = 0.9 + Math.sin((pathProgress + index) * Math.PI * 2) * 0.06
+
+    context.save()
+    context.globalAlpha = opacity * (0.72 + (index % 3) * 0.08)
+    context.translate(point.x, point.y)
+    context.rotate(angle * 0.24 + progress * (index % 2 === 0 ? 0.16 : -0.13))
+    context.scale(pulse, pulse)
+    context.shadowColor = 'rgba(255,39,48,.62)'
+    context.shadowBlur = unit * 0.025
+    context.drawImage(
+      image,
+      sourceX,
+      sourceY,
+      Math.min(sourcePartWidth, sourceWidth - sourceX),
+      Math.min(sourcePartHeight, sourceHeight - sourceY),
+      -destinationWidth / 2,
+      -destinationHeight / 2,
+      destinationWidth,
+      destinationHeight,
+    )
+    context.restore()
+  })
+}
+
 function drawDistributionMotion(
   context: CanvasRenderingContext2D,
   width: number,
@@ -262,15 +469,23 @@ function drawFrame(
   context.fillStyle = progress > 0.72 ? '#080b10' : '#f4f0e8'
   context.fillRect(0, 0, width, height)
 
-  images.forEach((image, index) => {
+  images.slice(0, 4).forEach((image, index) => {
     const opacity = stageOpacity(progress, index)
     if (opacity <= 0.002) return
     const localProgress = clamp((progress - index * 0.25) / 0.25)
-    drawImageLayer(context, image, width, height, opacity, localProgress, index)
+    if (index === 0) {
+      drawTechnicalBackdrop(context, width, height, opacity)
+      drawMechanicalAssembly(context, images[4], width, height, localProgress, opacity)
+    } else {
+      drawImageLayer(context, image, width, height, opacity, localProgress, index)
+    }
 
     if (index === 0) drawDiscoveryMotion(context, width, height, localProgress, opacity)
     if (index === 1) drawCompatibilityMotion(context, width, height, localProgress, opacity)
-    if (index === 2) drawDistributionMotion(context, width, height, localProgress, opacity)
+    if (index === 2) {
+      drawDistributionMotion(context, width, height, localProgress, opacity)
+      drawDistributionParts(context, images[5], width, height, localProgress, opacity)
+    }
     if (index === 3) drawFinalMotion(context, width, height, localProgress, opacity)
   })
 
