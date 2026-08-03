@@ -15,7 +15,7 @@ const iconMap = {
 
 export const Categories: React.FC = () => {
   return (
-    <section id="categorias" className="py-24 bg-white border-t border-carbon/10" aria-labelledby="categories-heading">
+    <section id="categorias" className="ambient-section ambient-grid py-24 bg-white border-t border-carbon/10" aria-labelledby="categories-heading">
       <div className="max-w-site mx-auto px-5 md:px-8 lg:px-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div>

@@ -102,7 +102,7 @@ export const QuoteForm: React.FC = () => {
   }
 
   return (
-    <section id="cotizacion" className="py-24 bg-ivory-100 border-t border-carbon/10" aria-labelledby="quote-heading">
+    <section id="cotizacion" className="ambient-section ambient-orbits py-24 bg-ivory-100 border-t border-carbon/10" aria-labelledby="quote-heading">
       <div className="max-w-site mx-auto px-5 md:px-8 lg:px-12">
         <div className="max-w-3xl mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-carbon/10">
           <div className="text-center mb-10">

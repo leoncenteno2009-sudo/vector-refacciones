@@ -6,7 +6,7 @@ import { Truck, Store, Users, ArrowRight } from 'lucide-react'
 
 export const Distribution: React.FC = () => {
   return (
-    <section id="distribucion" className="py-24 bg-white border-t border-carbon/10" aria-labelledby="distribution-heading">
+    <section id="distribucion" className="ambient-section ambient-route py-24 bg-white border-t border-carbon/10" aria-labelledby="distribution-heading">
       <div className="max-w-site mx-auto px-5 md:px-8 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column: Copy */}
@@ -51,10 +51,10 @@ export const Distribution: React.FC = () => {
 
           {/* Right Column: Warehouse Graphic/Photographic Holder */}
           <div className="lg:col-span-6">
-            <div className="relative rounded-2xl overflow-hidden bg-graphite p-8 text-white border border-carbon/20 shadow-2xl min-h-[420px] flex flex-col justify-between">
+            <div className="distribution-console relative rounded-2xl overflow-hidden bg-graphite p-8 text-white border border-carbon/20 shadow-2xl min-h-[420px] flex flex-col justify-between">
               {/* Technical Grid Overlay */}
               <div
-                className="absolute inset-0 opacity-20 pointer-events-none"
+                className="technical-grid absolute -inset-8 opacity-20 pointer-events-none"
                 style={{
                   backgroundImage:
                     'linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)',
@@ -70,7 +70,7 @@ export const Distribution: React.FC = () => {
               </div>
 
               <div className="relative z-10 my-auto py-12 text-center">
-                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-vector-red/20 border border-vector-red flex items-center justify-center text-vector-red">
+                <div className="distribution-pulse w-20 h-20 mx-auto mb-4 rounded-full bg-vector-red/20 border border-vector-red flex items-center justify-center text-vector-red">
                   <Truck className="w-10 h-10" />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-2">Despacho y Control de Calidad</h3>

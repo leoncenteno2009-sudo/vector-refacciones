@@ -7,7 +7,7 @@ export const ContactSection: React.FC = () => {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
 
   return (
-    <section id="contacto" className="py-24 bg-white border-t border-carbon/10" aria-labelledby="contact-heading">
+    <section id="contacto" className="ambient-section ambient-route py-24 bg-white border-t border-carbon/10" aria-labelledby="contact-heading">
       <div className="max-w-site mx-auto px-5 md:px-8 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>

@@ -12,30 +12,48 @@ interface SequenceSource {
   poster: string
   startTime: number
   endTime: number
+  cropLeft: number
+  cropRight: number
+  cropBottom: number
+  focalX: number
+  maskRecordedFrame?: boolean
 }
 
 const FRAME_COUNT = 180
 const HEADER_CROP = 68
 const SOURCE_WIDTH = 1280
-const SOURCE_HEIGHT = 720 - HEADER_CROP
+const SOURCE_HEIGHT = 720
 const sequences: SequenceSource[] = [
   {
     video: '/videos/scroll/hero.mp4',
     poster: '/images/scroll/vector-stage-01.jpg',
     startTime: 0.12,
     endTime: 5.65,
+    cropLeft: 520,
+    cropRight: 180,
+    cropBottom: 170,
+    focalX: 0.5,
+    maskRecordedFrame: true,
   },
   {
     video: '/videos/scroll/compatibility.mp4',
     poster: '/images/scroll/vector-stage-02.jpg',
     startTime: 0.12,
     endTime: 6.75,
+    cropLeft: 445,
+    cropRight: 180,
+    cropBottom: 170,
+    focalX: 0.48,
   },
   {
     video: '/videos/scroll/distribution.mp4',
     poster: '/images/scroll/vector-stage-03.jpg',
     startTime: 0.12,
     endTime: 5.55,
+    cropLeft: 310,
+    cropRight: 180,
+    cropBottom: 170,
+    focalX: 0.44,
   },
 ]
 
@@ -48,31 +66,35 @@ const smoothstep = (value: number) => {
 
 function getStageOpacity(progress: number, index: number) {
   const stageLength = 1 / sequences.length
-  const transition = 0.032
+  const transition = 0.026
   const start = index * stageLength
   const end = start + stageLength
 
-  if (index === 0) return 1 - smoothstep((progress - (end - transition)) / (transition * 2))
-  if (index === sequences.length - 1) return smoothstep((progress - (start - transition)) / (transition * 2))
-
-  const fadeIn = smoothstep((progress - (start - transition)) / (transition * 2))
-  const fadeOut = 1 - smoothstep((progress - (end - transition)) / (transition * 2))
+  const fadeIn = index === 0 ? 1 : smoothstep((progress - start) / transition)
+  const fadeOut = index === sequences.length - 1
+    ? 1
+    : 1 - smoothstep((progress - (end - transition)) / transition)
   return Math.min(fadeIn, fadeOut)
 }
 
-function getCoverRect(width: number, height: number, sourceRatio: number) {
-  const destinationRatio = width / height
-  const compact = width < 720
-  let drawWidth = width
-  let drawHeight = height
+function getCoverRect(
+  areaX: number,
+  areaY: number,
+  areaWidth: number,
+  areaHeight: number,
+  sourceRatio: number,
+  focalX = 0.5,
+) {
+  const destinationRatio = areaWidth / areaHeight
+  let drawWidth = areaWidth
+  let drawHeight = areaHeight
 
-  if (sourceRatio > destinationRatio) drawWidth = height * sourceRatio
-  else drawHeight = width / sourceRatio
+  if (sourceRatio > destinationRatio) drawWidth = areaHeight * sourceRatio
+  else drawHeight = areaWidth / sourceRatio
 
-  const overflowX = width - drawWidth
   return {
-    x: overflowX * (compact ? 0.82 : 0.5),
-    y: (height - drawHeight) / 2,
+    x: areaX + (areaWidth - drawWidth) * focalX,
+    y: areaY + (areaHeight - drawHeight) / 2,
     width: drawWidth,
     height: drawHeight,
   }
@@ -86,7 +108,7 @@ function drawPoster(
   opacity: number,
 ) {
   if (!poster.complete || !poster.naturalWidth) return
-  const rect = getCoverRect(width, height, poster.naturalWidth / poster.naturalHeight)
+  const rect = getCoverRect(0, 0, width, height, poster.naturalWidth / poster.naturalHeight)
   context.save()
   context.globalAlpha = opacity
   context.drawImage(poster, rect.x, rect.y, rect.width, rect.height)
@@ -99,42 +121,72 @@ function drawVideo(
   width: number,
   height: number,
   opacity: number,
+  sequence: SequenceSource,
+  wideLayout: boolean,
 ) {
   if (video.readyState < 2 || !video.videoWidth) return false
-  const rect = getCoverRect(width, height, SOURCE_WIDTH / SOURCE_HEIGHT)
+  const sourceWidth = SOURCE_WIDTH - sequence.cropLeft - sequence.cropRight
+  const sourceHeight = SOURCE_HEIGHT - HEADER_CROP - sequence.cropBottom
+  const visualX = wideLayout ? width * 0.28 : 0
+  const visualWidth = wideLayout ? width * 0.72 : width
+  const rect = getCoverRect(
+    visualX,
+    0,
+    visualWidth,
+    height,
+    sourceWidth / sourceHeight,
+    sequence.focalX,
+  )
 
   context.save()
+  context.beginPath()
+  context.rect(visualX, 0, visualWidth, height)
+  context.clip()
   context.globalAlpha = opacity
   context.filter = 'saturate(0.96) contrast(1.015)'
   context.drawImage(
     video,
-    0,
+    sequence.cropLeft,
     HEADER_CROP,
-    SOURCE_WIDTH,
-    SOURCE_HEIGHT,
+    sourceWidth,
+    sourceHeight,
     rect.x,
     rect.y,
     rect.width,
     rect.height,
   )
+
+  if (sequence.maskRecordedFrame) {
+    context.filter = 'none'
+
+    const leftFade = context.createLinearGradient(visualX, 0, width * 0.47, 0)
+    leftFade.addColorStop(0, 'rgba(244, 240, 232, 1)')
+    leftFade.addColorStop(0.28, 'rgba(244, 240, 232, 1)')
+    leftFade.addColorStop(0.68, 'rgba(244, 240, 232, 0.64)')
+    leftFade.addColorStop(1, 'rgba(244, 240, 232, 0)')
+    context.fillStyle = leftFade
+    context.fillRect(visualX, 0, width * 0.47 - visualX, height)
+
+    const rightFade = context.createLinearGradient(width * 0.89, 0, width, 0)
+    rightFade.addColorStop(0, 'rgba(244, 240, 232, 0)')
+    rightFade.addColorStop(0.42, 'rgba(244, 240, 232, 0.5)')
+    rightFade.addColorStop(0.66, 'rgba(244, 240, 232, 1)')
+    rightFade.addColorStop(1, 'rgba(244, 240, 232, 1)')
+    context.fillStyle = rightFade
+    context.fillRect(width * 0.89, 0, width * 0.11, height)
+
+    const bottomFade = context.createLinearGradient(0, height * 0.53, 0, height)
+    bottomFade.addColorStop(0, 'rgba(244, 240, 232, 0)')
+    bottomFade.addColorStop(0.18, 'rgba(244, 240, 232, 0.55)')
+    bottomFade.addColorStop(0.3, 'rgba(244, 240, 232, 0.96)')
+    bottomFade.addColorStop(0.4, 'rgba(244, 240, 232, 1)')
+    bottomFade.addColorStop(1, 'rgba(244, 240, 232, 1)')
+    context.fillStyle = bottomFade
+    context.fillRect(visualX, height * 0.53, visualWidth, height * 0.47)
+  }
+
   context.restore()
   return true
-}
-
-function drawFrameLabel(
-  context: CanvasRenderingContext2D,
-  width: number,
-  height: number,
-  progress: number,
-) {
-  const frameNumber = Math.round(progress * (FRAME_COUNT - 1))
-  context.save()
-  context.globalAlpha = 0.24
-  context.fillStyle = '#171717'
-  context.font = `${Math.max(8, Math.round(height * 0.011))}px Manrope, sans-serif`
-  context.letterSpacing = '0.14em'
-  context.fillText(`FRAME ${String(frameNumber).padStart(3, '0')} / ${FRAME_COUNT}`, width * 0.83, height * 0.94)
-  context.restore()
 }
 
 export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ progressRef }) => {
@@ -189,6 +241,7 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
       const width = Math.max(1, Math.round(bounds.width * dpr))
       const height = Math.max(1, Math.round(bounds.height * dpr))
+      const wideLayout = bounds.width >= 1024
       const progress = clamp(progressRef.current)
       const dimensionsChanged = width !== lastWidth || height !== lastHeight
       const stage = Math.min(sequences.length - 1, Math.floor(progress * sequences.length))
@@ -220,15 +273,14 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
         context.fillStyle = '#f4f0e8'
         context.fillRect(0, 0, width, height)
 
-        sequences.forEach((_, index) => {
+        sequences.forEach((sequence, index) => {
           const opacity = getStageOpacity(progress, index)
           if (opacity <= 0.002) return
-          if (!drawVideo(context, videos[index], width, height, opacity)) {
+          if (!drawVideo(context, videos[index], width, height, opacity, sequence, wideLayout)) {
             drawPoster(context, posters[index], width, height, opacity)
           }
         })
 
-        drawFrameLabel(context, width, height, progress)
         const activeSequence = sequences[stage]
         const activeVideo = videos[stage]
         const motionTime = Math.max(0, activeVideo.currentTime - activeSequence.startTime)
@@ -236,6 +288,8 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
         canvas.dataset.stage = String(stage + 1)
         canvas.dataset.motionTime = motionTime.toFixed(3)
         canvas.dataset.playing = String(!activeVideo.paused)
+        canvas.dataset.visibleCount = String(visibleSequences.filter(Boolean).length)
+        canvas.dataset.sourceSizes = videos.map((video) => `${video.videoWidth}x${video.videoHeight}`).join(',')
         lastProgress = progress
         lastWidth = width
         lastHeight = height
@@ -268,6 +322,8 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
       data-stage="1"
       data-motion-time="0"
       data-playing="false"
+      data-visible-count="0"
+      data-source-sizes=""
     />
   )
 }

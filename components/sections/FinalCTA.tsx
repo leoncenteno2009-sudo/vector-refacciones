@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react'
 
 export const FinalCTA: React.FC = () => {
   return (
-    <section className="py-24 bg-graphite text-white border-t border-white/10" aria-label="Llamado a la acción final">
+    <section className="ambient-section ambient-grid ambient-route ambient-dark py-24 bg-graphite text-white border-t border-white/10" aria-label="Llamado a la acción final">
       <div className="max-w-site mx-auto px-5 md:px-8 lg:px-12 text-center">
         <div className="max-w-3xl mx-auto flex flex-col items-center gap-6">
           <span className="text-xs uppercase font-bold tracking-widest text-vector-red px-3 py-1 bg-vector-red/10 rounded-full border border-vector-red/20">
