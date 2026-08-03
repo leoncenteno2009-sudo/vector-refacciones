@@ -15,7 +15,7 @@ const iconMap = {
 
 export const Categories: React.FC = () => {
   return (
-    <section id="categorias" className="ambient-section ambient-grid py-24 bg-white border-t border-carbon/10" aria-labelledby="categories-heading">
+    <section id="categorias" className="ambient-section ambient-grid py-24 bg-[#F4F5F7] border-t border-carbon/10" aria-labelledby="categories-heading">
       <div className="max-w-site mx-auto px-5 md:px-8 lg:px-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div>
@@ -39,7 +39,7 @@ export const Categories: React.FC = () => {
               <a
                 key={cat.id}
                 href="#compatibilidad"
-                className="group p-8 rounded-2xl bg-ivory-200/50 border border-carbon/10 hover:border-vector-red/60 hover:bg-white hover:-translate-y-1.5 hover:shadow-[0_16px_36px_rgba(13,15,18,0.08)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between"
+                className="group p-8 rounded-2xl bg-white border border-carbon/10 hover:border-vector-red/60 hover:-translate-y-1.5 hover:shadow-[0_16px_36px_rgba(13,15,18,0.08)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-6">

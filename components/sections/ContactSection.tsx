@@ -7,7 +7,7 @@ export const ContactSection: React.FC = () => {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
 
   return (
-    <section id="contacto" className="ambient-section ambient-route py-24 bg-white border-t border-carbon/10" aria-labelledby="contact-heading">
+    <section id="contacto" className="ambient-section ambient-route py-24 bg-[#F4F5F7] border-t border-carbon/10" aria-labelledby="contact-heading">
       <div className="max-w-site mx-auto px-5 md:px-8 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
@@ -35,7 +35,7 @@ export const ContactSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-ivory-200/60 p-8 md:p-10 rounded-2xl border border-carbon/10 shadow-[0_8px_30px_rgba(13,15,18,0.04)] hover:shadow-[0_12px_36px_rgba(13,15,18,0.08)] hover:border-vector-red/40 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]">
+          <div className="bg-white p-8 md:p-10 rounded-2xl border border-carbon/10 shadow-[0_8px_30px_rgba(13,15,18,0.04)] hover:shadow-[0_12px_36px_rgba(13,15,18,0.08)] hover:border-vector-red/40 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]">
             <h3 className="text-xl font-bold text-carbon mb-4">Garantía de servicio VECTOR</h3>
             <ul className="space-y-3 text-sm text-text-secondary">
               <li className="flex items-center gap-2">

@@ -5,7 +5,7 @@ import { quoteStepsContent } from '@/content/siteContent'
 
 export const QuoteProcess: React.FC = () => {
   return (
-    <section className="ambient-section ambient-grid py-24 bg-white border-t border-carbon/10" aria-labelledby="process-heading">
+    <section className="ambient-section ambient-grid py-24 bg-[#F4F5F7] border-t border-carbon/10" aria-labelledby="process-heading">
       <div className="max-w-site mx-auto px-5 md:px-8 lg:px-12">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <span className="text-xs uppercase font-bold tracking-widest text-vector-red">
@@ -23,7 +23,7 @@ export const QuoteProcess: React.FC = () => {
           {quoteStepsContent.map((step, idx) => (
             <div
               key={step.number}
-              className="z-[1] p-8 rounded-2xl bg-ivory-100/90 border border-carbon/10 relative flex flex-col justify-between"
+              className="z-[1] p-8 rounded-2xl bg-white border border-carbon/10 shadow-[0_8px_24px_rgba(13,15,18,0.04)] relative flex flex-col justify-between"
             >
               <div>
                 <span className="text-4xl font-extrabold text-vector-red font-mono block mb-4">

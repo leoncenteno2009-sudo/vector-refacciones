@@ -22,7 +22,7 @@ export const CompatibilityFinder: React.FC = () => {
   }
 
   return (
-    <section id="compatibilidad" className="ambient-section ambient-orbits py-24 bg-ivory-200 border-t border-carbon/10" aria-labelledby="finder-heading">
+    <section id="compatibilidad" className="ambient-section ambient-orbits py-24 bg-[#F4F5F7] border-t border-carbon/10" aria-labelledby="finder-heading">
       <div className="max-w-site mx-auto px-5 md:px-8 lg:px-12">
         <div className="max-w-3xl mb-12">
           <span className="text-xs uppercase font-bold tracking-widest text-vector-red">
