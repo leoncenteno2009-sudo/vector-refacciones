@@ -7,7 +7,7 @@ interface ScrollProgressProps {
   progressFillRef: React.RefObject<HTMLDivElement>
 }
 
-const steps = ['Descubrir', 'Compatibilidad', 'Distribución']
+const steps = ['Descubrir', 'Compatibilidad', 'Distribución', 'Integrar']
 
 export const ScrollProgress: React.FC<ScrollProgressProps> = ({
   currentStateIndex,

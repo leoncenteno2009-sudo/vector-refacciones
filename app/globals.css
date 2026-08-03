@@ -35,7 +35,7 @@ body {
 /* Scroll-sequence hero */
 .vector-story {
   position: relative;
-  height: 480vh;
+  height: 600vh;
   background: var(--bg-ivory-main);
 }
 
@@ -146,7 +146,8 @@ body {
 }
 
 .stage-copy--2 .stage-copy__title,
-.stage-copy--3 .stage-copy__title { font-size: clamp(42px, 4vw, 64px); }
+.stage-copy--3 .stage-copy__title,
+.stage-copy--4 .stage-copy__title { font-size: clamp(42px, 4vw, 64px); }
 
 .stage-copy__description {
   max-width: 470px;
@@ -284,7 +285,7 @@ body {
 }
 
 @media (max-width: 1023px) {
-  .vector-story { height: 420vh; }
+  .vector-story { height: 540vh; }
   .vector-story__sticky { min-height: 640px; }
   .vector-story__content { padding: 96px 28px 50px; align-items: flex-end; }
   .vector-story__vignette {
@@ -294,13 +295,13 @@ body {
   }
   .is-dark .vector-story__vignette { background: linear-gradient(180deg, rgba(8,11,16,.08) 18%, rgba(8,11,16,.48) 53%, rgba(8,11,16,.98) 78%); }
   .stage-copy { width: min(640px, calc(100vw - 56px)); padding-bottom: 18px; }
-  .stage-copy__title, .stage-copy--2 .stage-copy__title, .stage-copy--3 .stage-copy__title { max-width: 620px; font-size: clamp(42px, 7vw, 66px); }
+  .stage-copy__title, .stage-copy--2 .stage-copy__title, .stage-copy--3 .stage-copy__title, .stage-copy--4 .stage-copy__title { max-width: 620px; font-size: clamp(42px, 7vw, 66px); }
   .stage-copy__description { max-width: 560px; }
   .story-progress { display: none; }
 }
 
 @media (max-width: 640px) {
-  .vector-story { height: 390vh; }
+  .vector-story { height: 500vh; }
   .vector-story__sticky { min-height: 620px; }
   .vector-story__content { padding: 88px 20px 34px; }
   .vector-story__canvas { height: 62%; }
@@ -309,7 +310,7 @@ body {
   .is-dark .vector-story__vignette { background: linear-gradient(180deg, transparent 8%, rgba(8,11,16,.12) 38%, #080b10 63%, #080b10 100%); }
   .stage-copy { width: 100%; padding-bottom: 24px; }
   .stage-copy__eyebrow { margin-bottom: 13px; font-size: 9px; }
-  .stage-copy__title, .stage-copy--2 .stage-copy__title, .stage-copy--3 .stage-copy__title { font-size: clamp(36px, 11vw, 48px); line-height: 1; }
+  .stage-copy__title, .stage-copy--2 .stage-copy__title, .stage-copy--3 .stage-copy__title, .stage-copy--4 .stage-copy__title { font-size: clamp(36px, 11vw, 48px); line-height: 1; }
   .stage-copy__description { margin-top: 16px; font-size: 14px; line-height: 1.45; }
   .stage-copy__actions { margin-top: 18px; gap: 8px; }
   .vector-button { min-height: 45px; padding: 0 15px; gap: 12px; font-size: 12px; }

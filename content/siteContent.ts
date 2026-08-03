@@ -37,6 +37,15 @@ export const scrollSequenceStates: ScrollStateContent[] = [
     benefits: ['Envíos nacionales', 'Atención especializada', 'Cotización ágil'],
     primaryCTA: { label: 'Conocer distribución', href: '#distribucion' },
   },
+  {
+    id: 'estado-04',
+    tag: '03 / INTEGRAR',
+    title: 'Todo encaja. Tu vehículo vuelve al camino.',
+    description:
+      'Refacciones, compatibilidad y atención especializada reunidas para darte una solución completa.',
+    benefits: ['Selección precisa', 'Soporte especializado', 'Respuesta ágil'],
+    primaryCTA: { label: 'Solicitar cotización', href: '#cotizacion' },
+  },
 ]
 
 export const categoriesContent = [

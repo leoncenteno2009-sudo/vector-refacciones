@@ -12,7 +12,7 @@ interface ScrollStageCopyProps {
 
 export const ScrollStageCopy: React.FC<ScrollStageCopyProps> = ({ currentStateIndex }) => {
   const state = scrollSequenceStates[currentStateIndex]
-  const isDistribution = currentStateIndex === 2
+  const isEmphasisStage = currentStateIndex >= 2
 
   return (
     <div key={state.id} className={`stage-copy stage-copy--${currentStateIndex + 1}`}>
@@ -38,7 +38,7 @@ export const ScrollStageCopy: React.FC<ScrollStageCopyProps> = ({ currentStateIn
         </div>
       )}
 
-      {currentStateIndex === 2 && state.benefits && (
+      {state.benefits && (
         <ul className="stage-copy__benefits">
           {state.benefits.map((benefit) => (
             <li key={benefit}><Check aria-hidden="true" />{benefit}</li>
@@ -69,7 +69,7 @@ export const ScrollStageCopy: React.FC<ScrollStageCopyProps> = ({ currentStateIn
           </>
         ) : (
           <>
-            <a className={`vector-button ${isDistribution ? 'vector-button--red' : ''}`} href={state.primaryCTA.href}>
+            <a className={`vector-button ${isEmphasisStage ? 'vector-button--red' : ''}`} href={state.primaryCTA.href}>
               <span>{state.primaryCTA.label}</span>
               <ArrowRight aria-hidden="true" />
             </a>

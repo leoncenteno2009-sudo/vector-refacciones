@@ -64,7 +64,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" sizes="180x180" href={`${assetBasePath}/apple-touch-icon.png`} />
         <link
           rel="preload"
-          href={`${assetBasePath}/videos/scroll/hero.mp4`}
+          href={`${assetBasePath}/videos/scroll/vector-core-rotation.mp4`}
           as="video"
           type="video/mp4"
         />
