@@ -80,9 +80,9 @@ export const MechanicalNucleus: React.FC<MechanicalNucleusProps> = ({ progress }
   const brushedSteelMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#D0D5DD',
-        roughness: 0.28,
-        metalness: 0.92,
+        color: '#E2E8F0',
+        roughness: 0.2,
+        metalness: 0.95,
       }),
     []
   )
@@ -90,9 +90,9 @@ export const MechanicalNucleus: React.FC<MechanicalNucleusProps> = ({ progress }
   const darkGraphiteMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#23272E',
-        roughness: 0.45,
-        metalness: 0.75,
+        color: '#1E293B',
+        roughness: 0.4,
+        metalness: 0.8,
       }),
     []
   )
@@ -101,8 +101,8 @@ export const MechanicalNucleus: React.FC<MechanicalNucleusProps> = ({ progress }
     () =>
       new THREE.MeshStandardMaterial({
         color: '#B62025',
-        roughness: 0.3,
-        metalness: 0.6,
+        roughness: 0.25,
+        metalness: 0.7,
       }),
     []
   )
@@ -110,9 +110,9 @@ export const MechanicalNucleus: React.FC<MechanicalNucleusProps> = ({ progress }
   const ceramicMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#F4F1EA',
-        roughness: 0.15,
-        metalness: 0.1,
+        color: '#FFFFFF',
+        roughness: 0.1,
+        metalness: 0.05,
       }),
     []
   )
@@ -120,9 +120,9 @@ export const MechanicalNucleus: React.FC<MechanicalNucleusProps> = ({ progress }
   const copperMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#D97706',
-        roughness: 0.35,
-        metalness: 0.85,
+        color: '#F59E0B',
+        roughness: 0.3,
+        metalness: 0.9,
       }),
     []
   )
@@ -137,14 +137,24 @@ export const MechanicalNucleus: React.FC<MechanicalNucleusProps> = ({ progress }
     []
   )
 
-  // Frame Interpolation
-  useFrame(() => {
+  // Frame Interpolation with continuous micro-idle movement
+  useFrame((state) => {
     if (!groupRef.current) return
 
-    // Gentle baseline axial rotation
+    const elapsedTime = state.clock.getElapsedTime()
+
+    // Continuous subtle gear rotation even at rest
+    if (mainGearRef.current) {
+      mainGearRef.current.rotation.z = elapsedTime * 0.3 + progress * Math.PI * 0.8
+    }
+    if (secGearRef.current) {
+      secGearRef.current.rotation.z = -elapsedTime * 0.45 - progress * Math.PI * 1.2
+    }
+
+    // Baseline axial group rotation
     groupRef.current.rotation.y = THREE.MathUtils.lerp(
       groupRef.current.rotation.y,
-      progress * Math.PI * 0.4,
+      progress * Math.PI * 0.4 + Math.sin(elapsedTime * 0.5) * 0.04,
       0.08
     )
 
@@ -160,17 +170,15 @@ export const MechanicalNucleus: React.FC<MechanicalNucleusProps> = ({ progress }
       }
       if (mainGearRef.current) mainGearRef.current.position.set(1.7 - p * 0.5, 0.7 - p * 0.2, 0)
       if (secGearRef.current) secGearRef.current.position.set(2.4 - p * 0.6, 0.2 - p * 0.1, -0.2)
-      if (piston1GroupRef.current) piston1GroupRef.current.position.set(-1.8 + p * 0.5, -0.8 + p * 0.3, 0.1)
-      if (piston2GroupRef.current) piston2GroupRef.current.position.set(-2.4 + p * 0.7, 0.9 - p * 0.4, -0.3)
+      if (piston1GroupRef.current)
+        piston1GroupRef.current.position.set(-1.8 + p * 0.5, -0.8 + p * 0.3 + Math.sin(elapsedTime * 2) * 0.03, 0.1)
+      if (piston2GroupRef.current)
+        piston2GroupRef.current.position.set(-2.4 + p * 0.7, 0.9 - p * 0.4 + Math.cos(elapsedTime * 2) * 0.03, -0.3)
       if (shockRef.current) shockRef.current.position.set(0.8 - p * 0.2, -1.6 + p * 0.5, 0.2)
     } else if (progress <= 0.5) {
       const p = (progress - 0.24) / 0.26
       if (mainGearRef.current) {
         mainGearRef.current.position.set(1.2 - p * 0.5, 0.5 - p * 0.3, 0)
-        mainGearRef.current.rotation.z = p * Math.PI * 0.8
-      }
-      if (secGearRef.current) {
-        secGearRef.current.rotation.z = -p * Math.PI * 1.2
       }
       if (piston1GroupRef.current) {
         piston1GroupRef.current.position.set(-1.3 + p * 0.6, -0.5 + p * 0.3, 0)

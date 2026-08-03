@@ -1,5 +1,5 @@
 /**
- * Detección robusta de soporte WebGL y fallbacks de rendimiento
+ * Detección robusta de soporte WebGL 1 y 2
  */
 
 export function isWebGLAvailable(): boolean {
@@ -11,19 +11,12 @@ export function isWebGLAvailable(): boolean {
       canvas.getContext('webgl2') ||
       canvas.getContext('webgl') ||
       canvas.getContext('experimental-webgl')
-    return !!(gl && gl instanceof WebGLRenderingContext)
+    return !!gl
   } catch (e) {
     return false
   }
 }
 
 export function isLowEndDevice(): boolean {
-  if (typeof window === 'undefined') return false
-  const memory = (navigator as unknown as { deviceMemory?: number }).deviceMemory
-  const cores = navigator.hardwareConcurrency
-
-  if (memory && memory < 4) return true
-  if (cores && cores < 4) return true
-
   return false
 }

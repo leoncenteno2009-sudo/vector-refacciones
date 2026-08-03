@@ -18,9 +18,10 @@ interface VectorCanvasProps {
 const VectorScene: React.FC<{ progressRef: React.MutableRefObject<number> }> = ({ progressRef }) => {
   const [localProgress, setLocalProgress] = useState(0)
 
-  useFrame(() => {
-    if (Math.abs(localProgress - progressRef.current) > 0.001) {
-      setLocalProgress(progressRef.current)
+  useFrame((state, delta) => {
+    const currentP = progressRef.current || 0
+    if (Math.abs(localProgress - currentP) > 0.0005) {
+      setLocalProgress(currentP)
     }
   })
 
@@ -35,29 +36,31 @@ const VectorScene: React.FC<{ progressRef: React.MutableRefObject<number> }> = (
 }
 
 export const VectorCanvas: React.FC<VectorCanvasProps> = ({ progressRef, currentStateIndex }) => {
-  const [hasWebGL, setHasWebGL] = useState<boolean | null>(null)
+  const [hasWebGL, setHasWebGL] = useState<boolean>(true)
 
   useEffect(() => {
-    setHasWebGL(isWebGLAvailable())
+    if (!isWebGLAvailable()) {
+      setHasWebGL(false)
+    }
   }, [])
 
-  if (hasWebGL === false) {
+  if (!hasWebGL) {
     return <FallbackPoster stateIndex={currentStateIndex} />
   }
 
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full h-full relative min-h-[350px] lg:min-h-[500px]">
       <Canvas
-        camera={{ position: [0, 0, 7], fov: 35 }}
-        dpr={[1, 1.5]}
+        camera={{ position: [0, 0, 6.5], fov: 36 }}
+        dpr={[1, 2]}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         className="w-full h-full"
       >
-        {/* PBR Lights */}
-        <ambientLight intensity={0.85} />
-        <directionalLight position={[5, 8, 5]} intensity={1.6} castShadow />
-        <directionalLight position={[-5, -4, -3]} intensity={0.4} color="#78BDE7" />
-        <pointLight position={[0, 0, 4]} intensity={0.6} color="#FFFFFF" />
+        {/* Ambient & Studio Lights */}
+        <ambientLight intensity={1.1} />
+        <directionalLight position={[6, 8, 6]} intensity={2.0} castShadow />
+        <directionalLight position={[-6, -4, -3]} intensity={0.6} color="#78BDE7" />
+        <pointLight position={[0, 0, 4]} intensity={0.8} color="#FFFFFF" />
 
         {/* 3D Scene */}
         <VectorScene progressRef={progressRef} />
