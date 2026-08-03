@@ -30,7 +30,7 @@ export const VectorScrollStory: React.FC = () => {
         onUpdate: (self) => {
           const { progress, direction } = self
           progressRef.current = progress
-          const nextIndex = Math.min(3, Math.floor(progress * 4))
+          const nextIndex = Math.min(2, Math.floor(progress * 3))
           setCurrentStateIndex((previous) => (previous === nextIndex ? previous : nextIndex))
 
           if (progressFillRef.current) progressFillRef.current.style.transform = `scaleY(${progress})`
@@ -52,7 +52,7 @@ export const VectorScrollStory: React.FC = () => {
       className="vector-story"
       aria-label="Historia animada de refacciones, compatibilidad, distribución y movimiento VECTOR"
     >
-      <div ref={stickyRef} className={`vector-story__sticky ${currentStateIndex === 3 ? 'is-dark' : ''}`}>
+      <div ref={stickyRef} className="vector-story__sticky">
         <div className="vector-story__media" aria-hidden="true">
           <img
             src={getAssetPath('/images/scroll/vector-stage-01.jpg')}

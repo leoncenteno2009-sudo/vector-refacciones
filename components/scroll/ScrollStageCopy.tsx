@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { ArrowRight, Check, ShieldCheck, Truck, Wrench } from 'lucide-react'
+import { ArrowRight, Check } from 'lucide-react'
 import { scrollSequenceStates } from '@/content/siteContent'
 
 interface ScrollStageCopyProps {
@@ -10,7 +10,7 @@ interface ScrollStageCopyProps {
 
 export const ScrollStageCopy: React.FC<ScrollStageCopyProps> = ({ currentStateIndex }) => {
   const state = scrollSequenceStates[currentStateIndex]
-  const isFinal = currentStateIndex === 3
+  const isDistribution = currentStateIndex === 2
 
   return (
     <div key={state.id} className={`stage-copy stage-copy--${currentStateIndex + 1}`}>
@@ -45,7 +45,7 @@ export const ScrollStageCopy: React.FC<ScrollStageCopyProps> = ({ currentStateIn
       )}
 
       <div className="stage-copy__actions">
-        <a className={`vector-button ${isFinal ? 'vector-button--red' : ''}`} href={state.primaryCTA.href}>
+        <a className={`vector-button ${isDistribution ? 'vector-button--red' : ''}`} href={state.primaryCTA.href}>
           <span>{state.primaryCTA.label}</span>
           <ArrowRight aria-hidden="true" />
         </a>
@@ -55,14 +55,6 @@ export const ScrollStageCopy: React.FC<ScrollStageCopyProps> = ({ currentStateIn
           </a>
         )}
       </div>
-
-      {isFinal && (
-        <div className="stage-copy__trust" aria-label="Garantías de servicio">
-          <span><ShieldCheck aria-hidden="true" />Compatibilidad verificada</span>
-          <span><Truck aria-hidden="true" />Envíos nacionales</span>
-          <span><Wrench aria-hidden="true" />Soporte especializado</span>
-        </div>
-      )}
     </div>
   )
 }

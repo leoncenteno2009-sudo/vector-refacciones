@@ -34,7 +34,7 @@ body {
 /* Scroll-sequence hero */
 .vector-story {
   position: relative;
-  height: 520vh;
+  height: 480vh;
   background: var(--bg-ivory-main);
 }
 
@@ -93,7 +93,7 @@ body {
 .vector-story__vignette {
   z-index: 2;
   background:
-    linear-gradient(90deg, rgba(244, 240, 232, .98) 0%, rgba(244, 240, 232, .93) 26%, rgba(244, 240, 232, .38) 42%, transparent 59%),
+    linear-gradient(90deg, #f4f0e8 0%, #f4f0e8 36%, rgba(244, 240, 232, .96) 43%, rgba(244, 240, 232, .42) 52%, transparent 63%),
     linear-gradient(180deg, rgba(244, 240, 232, .32) 0%, transparent 22%, transparent 78%, rgba(244, 240, 232, .18) 100%);
   transition: background 700ms ease;
 }
@@ -297,7 +297,7 @@ body {
 }
 
 @media (max-width: 1023px) {
-  .vector-story { height: 460vh; }
+  .vector-story { height: 420vh; }
   .vector-story__sticky { min-height: 640px; }
   .vector-story__content { padding: 96px 28px 50px; align-items: flex-end; }
   .vector-story__fallback-image { object-position: 64% center; }
@@ -310,7 +310,7 @@ body {
 }
 
 @media (max-width: 640px) {
-  .vector-story { height: 430vh; }
+  .vector-story { height: 390vh; }
   .vector-story__sticky { min-height: 620px; }
   .vector-story__content { padding: 88px 20px 34px; }
   .vector-story__canvas,

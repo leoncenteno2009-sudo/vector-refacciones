@@ -37,20 +37,6 @@ export const scrollSequenceStates: ScrollStateContent[] = [
     benefits: ['Envíos nacionales', 'Atención especializada', 'Cotización ágil'],
     primaryCTA: { label: 'Conocer distribución', href: '#distribucion' },
   },
-  {
-    id: 'estado-04',
-    tag: '03 / VOLVER AL CAMINO',
-    title: 'Todo listo para volver a moverte.',
-    description:
-      'Cuéntanos qué refacción necesitas y te ayudaremos a encontrar una opción compatible.',
-    primaryCTA: { label: 'Solicitar cotización', href: '#cotizacion' },
-    secondaryCTA: { label: 'Hablar con un asesor', href: '#cotizacion' },
-    trustBadges: [
-      { icon: 'ShieldCheck', label: 'Compatibilidad verificada' },
-      { icon: 'Truck', label: 'Envíos nacionales' },
-      { icon: 'Wrench', label: 'Soporte para talleres' },
-    ],
-  },
 ]
 
 export const categoriesContent = [
