@@ -60,10 +60,6 @@ function getStageOpacity(progress: number, index: number) {
   return Math.min(fadeIn, fadeOut)
 }
 
-function getStageProgress(progress: number, index: number) {
-  return clamp((progress - index / sequences.length) * sequences.length)
-}
-
 function getCoverRect(width: number, height: number, sourceRatio: number) {
   const destinationRatio = width / height
   const compact = width < 720
@@ -161,8 +157,10 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
     const videos = sequences.map(({ video }) => {
       const element = document.createElement('video')
       element.muted = true
+      element.autoplay = true
       element.playsInline = true
       element.preload = 'auto'
+      element.disablePictureInPicture = true
       element.src = getAssetPath(video)
       element.load()
       return element
@@ -173,6 +171,7 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
     let lastWidth = 0
     let lastHeight = 0
     let isDisposed = false
+    const visibleSequences = sequences.map(() => false)
 
     const invalidate = () => {
       lastProgress = -1
@@ -181,7 +180,6 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
     posters.forEach((poster) => poster.addEventListener('load', invalidate))
     videos.forEach((video) => {
       video.addEventListener('loadeddata', invalidate)
-      video.addEventListener('seeked', invalidate)
     })
 
     const render = () => {
@@ -193,18 +191,27 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
       const height = Math.max(1, Math.round(bounds.height * dpr))
       const progress = clamp(progressRef.current)
       const dimensionsChanged = width !== lastWidth || height !== lastHeight
-      const progressChanged = Math.abs(progress - lastProgress) > 0.0001
+      const stage = Math.min(sequences.length - 1, Math.floor(progress * sequences.length))
 
       sequences.forEach((sequence, index) => {
-        const localProgress = getStageProgress(progress, index)
-        const targetTime = sequence.startTime + (sequence.endTime - sequence.startTime) * localProgress
         const video = videos[index]
-        if (video.readyState >= 1 && !video.seeking && Math.abs(video.currentTime - targetTime) > 0.028) {
-          video.currentTime = targetTime
+        const isVisible = getStageOpacity(progress, index) > 0.002
+
+        if (isVisible && !visibleSequences[index] && video.readyState >= 1) {
+          video.currentTime = sequence.startTime
         }
+
+        if (isVisible && video.readyState >= 2) {
+          if (video.currentTime >= sequence.endTime) video.currentTime = sequence.startTime
+          if (video.paused && !video.seeking) void video.play().catch(() => undefined)
+        } else if (!isVisible && !video.paused) {
+          video.pause()
+        }
+
+        visibleSequences[index] = isVisible
       })
 
-      if (dimensionsChanged || progressChanged) {
+      if (dimensionsChanged || Math.abs(progress - lastProgress) > 0.0001 || videos.some((video, index) => visibleSequences[index] && !video.paused)) {
         if (canvas.width !== width || canvas.height !== height) {
           canvas.width = width
           canvas.height = height
@@ -222,9 +229,13 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
         })
 
         drawFrameLabel(context, width, height, progress)
-        const stage = Math.min(sequences.length - 1, Math.floor(progress * sequences.length))
-        canvas.dataset.frame = String(Math.round(progress * (FRAME_COUNT - 1)))
+        const activeSequence = sequences[stage]
+        const activeVideo = videos[stage]
+        const motionTime = Math.max(0, activeVideo.currentTime - activeSequence.startTime)
+        canvas.dataset.frame = String(Math.round(motionTime * 30) % FRAME_COUNT)
         canvas.dataset.stage = String(stage + 1)
+        canvas.dataset.motionTime = motionTime.toFixed(3)
+        canvas.dataset.playing = String(!activeVideo.paused)
         lastProgress = progress
         lastWidth = width
         lastHeight = height
@@ -241,7 +252,7 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
       posters.forEach((poster) => poster.removeEventListener('load', invalidate))
       videos.forEach((video) => {
         video.removeEventListener('loadeddata', invalidate)
-        video.removeEventListener('seeked', invalidate)
+        video.pause()
         video.removeAttribute('src')
         video.load()
       })
@@ -255,6 +266,8 @@ export const CinematicScrollCanvas: React.FC<CinematicScrollCanvasProps> = ({ pr
       aria-hidden="true"
       data-frame="0"
       data-stage="1"
+      data-motion-time="0"
+      data-playing="false"
     />
   )
 }
