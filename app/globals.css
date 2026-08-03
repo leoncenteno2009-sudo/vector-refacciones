@@ -93,7 +93,7 @@ body {
 .vector-story__vignette {
   z-index: 2;
   background:
-    linear-gradient(90deg, #f4f0e8 0%, #f4f0e8 36%, rgba(244, 240, 232, .96) 43%, rgba(244, 240, 232, .42) 52%, transparent 63%),
+    linear-gradient(90deg, #f4f0e8 0%, #f4f0e8 42%, rgba(244, 240, 232, .98) 49%, rgba(244, 240, 232, .5) 58%, transparent 68%),
     linear-gradient(180deg, rgba(244, 240, 232, .32) 0%, transparent 22%, transparent 78%, rgba(244, 240, 232, .18) 100%);
   transition: background 700ms ease;
 }
@@ -301,7 +301,11 @@ body {
   .vector-story__sticky { min-height: 640px; }
   .vector-story__content { padding: 96px 28px 50px; align-items: flex-end; }
   .vector-story__fallback-image { object-position: 64% center; }
-  .vector-story__vignette { background: linear-gradient(180deg, rgba(244,240,232,.05) 20%, rgba(244,240,232,.44) 52%, rgba(244,240,232,.98) 73%); }
+  .vector-story__vignette {
+    background:
+      linear-gradient(180deg, rgba(244,240,232,.05) 20%, rgba(244,240,232,.44) 52%, rgba(244,240,232,.98) 73%),
+      linear-gradient(90deg, #f4f0e8 0%, rgba(244,240,232,.92) 40%, transparent 66%);
+  }
   .is-dark .vector-story__vignette { background: linear-gradient(180deg, rgba(8,11,16,.08) 18%, rgba(8,11,16,.48) 53%, rgba(8,11,16,.98) 78%); }
   .stage-copy { width: min(640px, calc(100vw - 56px)); padding-bottom: 18px; }
   .stage-copy__title, .stage-copy--2 .stage-copy__title, .stage-copy--3 .stage-copy__title { max-width: 620px; font-size: clamp(42px, 7vw, 66px); }
