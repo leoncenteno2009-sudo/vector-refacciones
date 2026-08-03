@@ -1,53 +1,79 @@
 'use client'
 
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { VectorCanvas } from '@/components/three/VectorCanvas'
+import { getAssetPath } from '@/lib/utils'
 import { ScrollStageCopy } from './ScrollStageCopy'
 import { ScrollProgress } from './ScrollProgress'
 
-export const VectorScrollStory: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const stickyRef = useRef<HTMLDivElement>(null)
+const stageImages = [
+  '/images/scroll/vector-stage-01.jpg',
+  '/images/scroll/vector-stage-02.jpg',
+  '/images/scroll/vector-stage-03.jpg',
+  '/images/scroll/vector-stage-04.jpg',
+]
 
-  // Use mutable refs for smooth 60fps render loop without triggering React re-renders on every scroll pixel
-  const progressRef = useRef(0)
+const clamp = (value: number) => Math.min(1, Math.max(0, value))
+const smoothstep = (value: number) => {
+  const t = clamp(value)
+  return t * t * (3 - 2 * t)
+}
+
+function getStageOpacity(progress: number, index: number) {
+  const transition = 0.055
+  const start = index * 0.25
+  const end = (index + 1) * 0.25
+
+  if (index === 0) return 1 - smoothstep((progress - (end - transition)) / (transition * 2))
+  if (index === 3) return smoothstep((progress - (start - transition)) / (transition * 2))
+
+  const fadeIn = smoothstep((progress - (start - transition)) / (transition * 2))
+  const fadeOut = 1 - smoothstep((progress - (end - transition)) / (transition * 2))
+  return Math.min(fadeIn, fadeOut)
+}
+
+export const VectorScrollStory: React.FC = () => {
+  const containerRef = useRef<HTMLElement>(null)
+  const imageRefs = useRef<Array<HTMLImageElement | null>>([])
+  const progressFillRef = useRef<HTMLDivElement>(null)
   const [currentStateIndex, setCurrentStateIndex] = useState(0)
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
 
-    if (!containerRef.current || !stickyRef.current) return
+    if (!containerRef.current) return
 
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
         trigger: containerRef.current,
         start: 'top top',
         end: 'bottom bottom',
-        pin: stickyRef.current,
-        scrub: 0.7,
         invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const p = self.progress
-          progressRef.current = p
+        onUpdate: ({ progress }) => {
+          const nextIndex = Math.min(3, Math.floor(progress * 4))
+          setCurrentStateIndex((previous) => (previous === nextIndex ? previous : nextIndex))
 
-          // Calculate discrete state index for HTML copy transitions only
-          let nextIndex = 0
-          if (p < 0.24) {
-            nextIndex = 0
-          } else if (p < 0.5) {
-            nextIndex = 1
-          } else if (p < 0.76) {
-            nextIndex = 2
-          } else {
-            nextIndex = 3
+          if (progressFillRef.current) {
+            progressFillRef.current.style.transform = `scaleY(${progress})`
           }
 
-          setCurrentStateIndex((prev) => (prev !== nextIndex ? nextIndex : prev))
+          imageRefs.current.forEach((image, index) => {
+            if (!image) return
+            const opacity = reduceMotion ? (index === nextIndex ? 1 : 0) : getStageOpacity(progress, index)
+            const localProgress = clamp((progress - index * 0.25) / 0.25)
+            const direction = index % 2 === 0 ? 1 : -1
+            image.style.opacity = opacity.toFixed(3)
+            image.style.transform = reduceMotion
+              ? 'scale(1.015) translate3d(0,0,0)'
+              : `scale(${(1.055 - localProgress * 0.045).toFixed(4)}) translate3d(${(
+                  direction * (1 - localProgress) * 1.35
+                ).toFixed(3)}%, ${(0.7 - localProgress * 0.7).toFixed(3)}%, 0)`
+          })
         },
       })
-    })
+    }, containerRef)
 
     return () => ctx.revert()
   }, [])
@@ -55,32 +81,42 @@ export const VectorScrollStory: React.FC = () => {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-[480vh] bg-ivory-100 transition-colors duration-700"
-      aria-label="Secuencia de presentación del Núcleo Mecánico VECTOR"
+      className="vector-story"
+      aria-label="Historia de refacciones, compatibilidad, distribución y movimiento VECTOR"
     >
-      {/* 100svh Sticky Viewport */}
-      <div
-        ref={stickyRef}
-        className={`w-full h-screen sticky top-0 left-0 overflow-hidden flex items-center transition-colors duration-700 ${
-          currentStateIndex === 3 ? 'bg-graphite text-white' : 'bg-ivory-100 text-carbon'
-        }`}
-      >
-        <div className="max-w-site w-full mx-auto px-5 md:px-8 lg:px-12 h-full flex flex-col justify-center pt-[80px]">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center h-[calc(100vh-100px)]">
-            {/* Column Left (1-5): Accessible HTML Text Content */}
-            <div className="lg:col-span-5 z-20 flex items-center">
-              <ScrollStageCopy progress={progressRef.current} currentStateIndex={currentStateIndex} />
-            </div>
-
-            {/* Column Right (6-12): 3D Canvas / Visual Scene */}
-            <div className="lg:col-span-7 h-full w-full relative z-10 min-h-[350px] lg:min-h-[500px]">
-              <VectorCanvas progressRef={progressRef} currentStateIndex={currentStateIndex} />
-            </div>
-          </div>
+      <div className={`vector-story__sticky ${currentStateIndex === 3 ? 'is-dark' : ''}`}>
+        <div className="vector-story__media" aria-hidden="true">
+          {stageImages.map((src, index) => (
+            <img
+              key={src}
+              ref={(node) => {
+                imageRefs.current[index] = node
+              }}
+              src={getAssetPath(src)}
+              alt=""
+              width={1672}
+              height={941}
+              loading={index === 0 ? 'eager' : 'lazy'}
+              fetchPriority={index === 0 ? 'high' : 'auto'}
+              className="vector-story__image"
+              style={{ opacity: index === 0 ? 1 : 0 }}
+            />
+          ))}
+          <div className="vector-story__vignette" />
+          <div className="vector-story__scanner" />
+          <div className="vector-story__grain" />
         </div>
 
-        {/* Progress Sidebar */}
-        <ScrollProgress progressRef={progressRef} currentStateIndex={currentStateIndex} />
+        <div className="vector-story__content">
+          <ScrollStageCopy currentStateIndex={currentStateIndex} />
+        </div>
+
+        <ScrollProgress currentStateIndex={currentStateIndex} progressFillRef={progressFillRef} />
+
+        <div className="vector-story__scroll-hint" aria-hidden="true">
+          <span>Desliza para explorar</span>
+          <i />
+        </div>
       </div>
     </section>
   )
