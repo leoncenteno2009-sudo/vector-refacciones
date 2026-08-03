@@ -7,7 +7,7 @@ import { Wrench, ShieldCheck, Zap } from 'lucide-react'
 
 export const Workshops: React.FC = () => {
   return (
-    <section id="talleres" className="ambient-section ambient-grid py-24 bg-[#F4F5F7] border-t border-carbon/10" aria-labelledby="workshops-heading">
+    <section id="talleres" className="ambient-section ambient-grid py-24 bg-[#303030] text-white border-t border-white/10" aria-labelledby="workshops-heading">
       <div className="max-w-site mx-auto px-5 md:px-8 lg:px-12">
         <div className="workshops-panel bg-carbon text-white rounded-3xl p-10 md:p-16 shadow-[0_20px_60px_rgba(13,15,18,0.25)] relative overflow-hidden">
           {/* Ambient Red Accent */}

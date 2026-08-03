@@ -22,27 +22,27 @@ export const CompatibilityFinder: React.FC = () => {
   }
 
   return (
-    <section id="compatibilidad" className="ambient-section ambient-orbits py-24 bg-[#F4F5F7] border-t border-carbon/10" aria-labelledby="finder-heading">
+    <section id="compatibilidad" className="ambient-section ambient-orbits py-24 bg-[#303030] text-white border-t border-white/10" aria-labelledby="finder-heading">
       <div className="max-w-site mx-auto px-5 md:px-8 lg:px-12">
         <div className="max-w-3xl mb-12">
           <span className="text-xs uppercase font-bold tracking-widest text-vector-red">
             Verificación de Ajuste Preciso
           </span>
-          <h2 id="finder-heading" className="section-h2 text-carbon mt-2">
+          <h2 id="finder-heading" className="section-h2 text-white mt-2">
             Buscador de compatibilidad automotriz
           </h2>
-          <p className="body-intro mt-4">
+          <p className="body-intro mt-4 text-gray-300">
             Ingresa las especificaciones de tu vehículo para verificar disponibilidad e iniciar tu cotización con respaldo técnico.
           </p>
         </div>
 
         <form
           onSubmit={handleSearch}
-          className="bg-white p-8 md:p-10 rounded-2xl shadow-[0_12px_40px_rgba(13,15,18,0.06)] border border-carbon/10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="bg-[#242424] p-8 md:p-10 rounded-2xl shadow-[0_16px_48px_rgba(0,0,0,0.4)] border border-white/10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
         >
           {/* Make Select */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="make-select" className="text-xs font-bold uppercase tracking-wider text-carbon">
+            <label htmlFor="make-select" className="text-xs font-bold uppercase tracking-wider text-white">
               1. Marca del vehículo *
             </label>
             <select
@@ -53,11 +53,11 @@ export const CompatibilityFinder: React.FC = () => {
                 setModel('')
               }}
               required
-              className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-200/60 text-carbon font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
+              className="w-full h-12 px-4 rounded-lg border border-white/20 bg-[#1A1A1A] text-white font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
             >
-              <option value="">Selecciona marca</option>
+              <option value="" className="bg-[#1A1A1A] text-white">Selecciona marca</option>
               {sampleVehicleData.makes.map((m) => (
-                <option key={m} value={m}>
+                <option key={m} value={m} className="bg-[#1A1A1A] text-white">
                   {m}
                 </option>
               ))}
@@ -66,7 +66,7 @@ export const CompatibilityFinder: React.FC = () => {
 
           {/* Model Select */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="model-select" className="text-xs font-bold uppercase tracking-wider text-carbon">
+            <label htmlFor="model-select" className="text-xs font-bold uppercase tracking-wider text-white">
               2. Modelo *
             </label>
             <select
@@ -75,13 +75,13 @@ export const CompatibilityFinder: React.FC = () => {
               onChange={(e) => setModel(e.target.value)}
               disabled={!make}
               required
-              className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-200/60 text-carbon font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none disabled:opacity-50"
+              className="w-full h-12 px-4 rounded-lg border border-white/20 bg-[#1A1A1A] text-white font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none disabled:opacity-50"
             >
-              <option value="">
+              <option value="" className="bg-[#1A1A1A] text-white">
                 {make ? 'Selecciona modelo' : 'Primero elige marca'}
               </option>
               {availableModels.map((m) => (
-                <option key={m} value={m}>
+                <option key={m} value={m} className="bg-[#1A1A1A] text-white">
                   {m}
                 </option>
               ))}
@@ -90,7 +90,7 @@ export const CompatibilityFinder: React.FC = () => {
 
           {/* Year Select */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="year-select" className="text-xs font-bold uppercase tracking-wider text-carbon">
+            <label htmlFor="year-select" className="text-xs font-bold uppercase tracking-wider text-white">
               3. Año *
             </label>
             <select
@@ -98,11 +98,11 @@ export const CompatibilityFinder: React.FC = () => {
               value={year}
               onChange={(e) => setYear(e.target.value)}
               required
-              className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-200/60 text-carbon font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
+              className="w-full h-12 px-4 rounded-lg border border-white/20 bg-[#1A1A1A] text-white font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
             >
-              <option value="">Selecciona año</option>
+              <option value="" className="bg-[#1A1A1A] text-white">Selecciona año</option>
               {sampleVehicleData.years.map((y) => (
-                <option key={y} value={y}>
+                <option key={y} value={y} className="bg-[#1A1A1A] text-white">
                   {y}
                 </option>
               ))}
@@ -111,7 +111,7 @@ export const CompatibilityFinder: React.FC = () => {
 
           {/* Part Name / Search */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="part-input" className="text-xs font-bold uppercase tracking-wider text-carbon">
+            <label htmlFor="part-input" className="text-xs font-bold uppercase tracking-wider text-white">
               4. Refacción o componente
             </label>
             <input
@@ -120,13 +120,13 @@ export const CompatibilityFinder: React.FC = () => {
               placeholder="Ej. Balatas delanteras, Amortiguador"
               value={partName}
               onChange={(e) => setPartName(e.target.value)}
-              className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-200/60 text-carbon font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none placeholder:text-text-secondary/60"
+              className="w-full h-12 px-4 rounded-lg border border-white/20 bg-[#1A1A1A] text-white font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none placeholder:text-gray-500"
             />
           </div>
 
           {/* Submit Button */}
-          <div className="lg:col-span-4 flex flex-col sm:flex-row items-center justify-between gap-6 pt-4 border-t border-carbon/10">
-            <div className="flex items-center gap-3 text-sm text-text-secondary">
+          <div className="lg:col-span-4 flex flex-col sm:flex-row items-center justify-between gap-6 pt-4 border-t border-white/10">
+            <div className="flex items-center gap-3 text-sm text-gray-300">
               <ShieldCheck className="w-5 h-5 text-vector-red shrink-0" />
               <span>Validación directa con catálogo de equipo original (OEM).</span>
             </div>
@@ -140,14 +140,14 @@ export const CompatibilityFinder: React.FC = () => {
 
         {/* Real search result feedback banner */}
         {searched && (
-          <div className="mt-8 p-6 rounded-xl bg-white border-2 border-vector-red/30 shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-6 animate-fadeIn">
+          <div className="mt-8 p-6 rounded-xl bg-[#242424] border-2 border-vector-red/50 shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-6 animate-fadeIn">
             <div className="flex items-start gap-4">
               <CheckCircle className="w-6 h-6 text-vector-red shrink-0 mt-1" />
               <div>
-                <h4 className="text-lg font-bold text-carbon">
+                <h4 className="text-lg font-bold text-white">
                   Solicitud lista para validación: {make} {model} ({year})
                 </h4>
-                <p className="text-sm text-text-secondary mt-1">
+                <p className="text-sm text-gray-300 mt-1">
                   Revisaremos la compatibilidad técnica antes de confirmar la pieza exacta en inventario.
                 </p>
               </div>

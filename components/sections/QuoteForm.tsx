@@ -102,17 +102,17 @@ export const QuoteForm: React.FC = () => {
   }
 
   return (
-    <section id="cotizacion" className="ambient-section ambient-orbits py-24 bg-[#F4F5F7] border-t border-carbon/10" aria-labelledby="quote-heading">
+    <section id="cotizacion" className="ambient-section ambient-orbits py-24 bg-[#303030] text-white border-t border-white/10" aria-labelledby="quote-heading">
       <div className="max-w-site mx-auto px-5 md:px-8 lg:px-12">
-        <div className="max-w-3xl mx-auto bg-white p-8 md:p-12 rounded-3xl shadow-[0_16px_48px_rgba(13,15,18,0.06)] border border-carbon/10">
+        <div className="max-w-3xl mx-auto bg-[#242424] p-8 md:p-12 rounded-3xl shadow-[0_16px_48px_rgba(0,0,0,0.4)] border border-white/10">
           <div className="text-center mb-10">
             <span className="text-xs uppercase font-bold tracking-widest text-vector-red">
               Cotización Sin Compromiso
             </span>
-            <h2 id="quote-heading" className="section-h2 text-carbon mt-2">
+            <h2 id="quote-heading" className="section-h2 text-white mt-2">
               Solicitar cotización técnica
             </h2>
-            <p className="body-intro mt-3">
+            <p className="body-intro mt-3 text-gray-300">
               Completa los datos de tu unidad y te enviaremos opciones disponibles en inventario con su confirmación de compatibilidad.
             </p>
           </div>
@@ -120,8 +120,8 @@ export const QuoteForm: React.FC = () => {
           {status === 'success' ? (
             <div className="p-8 rounded-2xl bg-vector-red/10 border-2 border-vector-red text-center animate-fadeIn">
               <CheckCircle2 className="w-12 h-12 text-vector-red mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-carbon mb-2">¡Solicitud de cotización preparada!</h3>
-              <p className="text-sm text-text-secondary max-w-md mx-auto mb-6">
+              <h3 className="text-2xl font-bold text-white mb-2">¡Solicitud de cotización preparada!</h3>
+              <p className="text-sm text-gray-300 max-w-md mx-auto mb-6">
                 Tu información se ha validado correctamente. Puedes compartir el resumen directamente con un asesor de VECTOR o copiarlo a tu portapapeles.
               </p>
 
@@ -154,7 +154,7 @@ export const QuoteForm: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleCopySummary}
-                  className="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-lg bg-ivory-200 text-carbon font-semibold hover:bg-ivory-300 transition-all border border-carbon/10"
+                  className="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-lg bg-[#1A1A1A] text-white font-semibold hover:bg-[#2A2A2A] transition-all border border-white/10"
                 >
                   {copied ? (
                     <>
@@ -170,7 +170,7 @@ export const QuoteForm: React.FC = () => {
                 </button>
               </div>
 
-              <div className="pt-4 border-t border-carbon/10">
+              <div className="pt-4 border-t border-white/10">
                 <Button onClick={() => setStatus('idle')} variant="secondary" className="text-sm">
                   Solicitar otra cotización
                 </Button>
@@ -193,7 +193,7 @@ export const QuoteForm: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Nombre */}
                 <div>
-                  <label htmlFor="name-input" className="block text-xs font-bold uppercase tracking-wider text-carbon mb-2">
+                  <label htmlFor="name-input" className="block text-xs font-bold uppercase tracking-wider text-white mb-2">
                     Nombre completo *
                   </label>
                   <input
@@ -203,7 +203,7 @@ export const QuoteForm: React.FC = () => {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     aria-describedby={errors.name ? 'name-error' : undefined}
-                    className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-200/60 font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
+                    className="w-full h-12 px-4 rounded-lg border border-white/20 bg-[#1A1A1A] text-white font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none placeholder:text-gray-500"
                     placeholder="Ej. Roberto Gómez"
                   />
                   {errors.name && (
@@ -215,7 +215,7 @@ export const QuoteForm: React.FC = () => {
 
                 {/* Contacto */}
                 <div>
-                  <label htmlFor="contact-input" className="block text-xs font-bold uppercase tracking-wider text-carbon mb-2">
+                  <label htmlFor="contact-input" className="block text-xs font-bold uppercase tracking-wider text-white mb-2">
                     Teléfono o Correo *
                   </label>
                   <input
@@ -225,7 +225,7 @@ export const QuoteForm: React.FC = () => {
                     value={formData.contact}
                     onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
                     aria-describedby={errors.contact ? 'contact-error' : undefined}
-                    className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-200/60 font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
+                    className="w-full h-12 px-4 rounded-lg border border-white/20 bg-[#1A1A1A] text-white font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none placeholder:text-gray-500"
                     placeholder="55 1234 5678 o correo@ejemplo.com"
                   />
                   {errors.contact && (
@@ -238,7 +238,7 @@ export const QuoteForm: React.FC = () => {
 
               {/* Tipo de Cliente */}
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-carbon mb-2">
+                <label className="block text-xs font-bold uppercase tracking-wider text-white mb-2">
                   Tipo de cliente *
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -249,8 +249,8 @@ export const QuoteForm: React.FC = () => {
                       onClick={() => setFormData({ ...formData, clientType: type })}
                       className={`h-12 px-4 rounded-lg border text-xs font-bold transition-all duration-300 ${
                         formData.clientType === type
-                          ? 'border-vector-red bg-vector-red/10 text-vector-red ring-2 ring-vector-red/30 shadow-sm'
-                          : 'border-carbon/20 bg-ivory-200/60 text-carbon hover:bg-white hover:border-carbon/40'
+                          ? 'border-vector-red bg-vector-red/20 text-vector-red ring-2 ring-vector-red/40 shadow-sm'
+                          : 'border-white/20 bg-[#1A1A1A] text-white hover:bg-[#2A2A2A] hover:border-white/40'
                       }`}
                     >
                       {type}
@@ -262,7 +262,7 @@ export const QuoteForm: React.FC = () => {
               {/* Vehicle Specs Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label htmlFor="form-make" className="block text-xs font-bold uppercase tracking-wider text-carbon mb-1">
+                  <label htmlFor="form-make" className="block text-xs font-bold uppercase tracking-wider text-white mb-1">
                     Marca *
                   </label>
                   <input
@@ -272,13 +272,13 @@ export const QuoteForm: React.FC = () => {
                     value={formData.make}
                     onChange={(e) => setFormData({ ...formData, make: e.target.value })}
                     placeholder="Ej. Nissan"
-                    className="w-full h-11 px-3 rounded-lg border border-carbon/20 bg-ivory-200/60 text-sm font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
+                    className="w-full h-11 px-3 rounded-lg border border-white/20 bg-[#1A1A1A] text-white text-sm font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none placeholder:text-gray-500"
                   />
                   {errors.make && <p className="text-xs text-vector-red mt-0.5">{errors.make}</p>}
                 </div>
 
                 <div>
-                  <label htmlFor="form-model" className="block text-xs font-bold uppercase tracking-wider text-carbon mb-1">
+                  <label htmlFor="form-model" className="block text-xs font-bold uppercase tracking-wider text-white mb-1">
                     Modelo *
                   </label>
                   <input
@@ -288,13 +288,13 @@ export const QuoteForm: React.FC = () => {
                     value={formData.model}
                     onChange={(e) => setFormData({ ...formData, model: e.target.value })}
                     placeholder="Ej. Versa"
-                    className="w-full h-11 px-3 rounded-lg border border-carbon/20 bg-ivory-200/60 text-sm font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
+                    className="w-full h-11 px-3 rounded-lg border border-white/20 bg-[#1A1A1A] text-white text-sm font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none placeholder:text-gray-500"
                   />
                   {errors.model && <p className="text-xs text-vector-red mt-0.5">{errors.model}</p>}
                 </div>
 
                 <div>
-                  <label htmlFor="form-year" className="block text-xs font-bold uppercase tracking-wider text-carbon mb-1">
+                  <label htmlFor="form-year" className="block text-xs font-bold uppercase tracking-wider text-white mb-1">
                     Año *
                   </label>
                   <input
@@ -304,7 +304,7 @@ export const QuoteForm: React.FC = () => {
                     value={formData.year}
                     onChange={(e) => setFormData({ ...formData, year: e.target.value })}
                     placeholder="Ej. 2021"
-                    className="w-full h-11 px-3 rounded-lg border border-carbon/20 bg-ivory-200/60 text-sm font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
+                    className="w-full h-11 px-3 rounded-lg border border-white/20 bg-[#1A1A1A] text-white text-sm font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none placeholder:text-gray-500"
                   />
                   {errors.year && <p className="text-xs text-vector-red mt-0.5">{errors.year}</p>}
                 </div>
@@ -312,7 +312,7 @@ export const QuoteForm: React.FC = () => {
 
               {/* Refacción Solicitada */}
               <div>
-                <label htmlFor="part-request" className="block text-xs font-bold uppercase tracking-wider text-carbon mb-2">
+                <label htmlFor="part-request" className="block text-xs font-bold uppercase tracking-wider text-white mb-2">
                   Refacción o síntoma que requieres *
                 </label>
                 <input
@@ -322,14 +322,14 @@ export const QuoteForm: React.FC = () => {
                   value={formData.part}
                   onChange={(e) => setFormData({ ...formData, part: e.target.value })}
                   placeholder="Ej. Amortiguadores delanteros, Kit de embrague, etc."
-                  className="w-full h-12 px-4 rounded-lg border border-carbon/20 bg-ivory-200/60 font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
+                  className="w-full h-12 px-4 rounded-lg border border-white/20 bg-[#1A1A1A] text-white font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none placeholder:text-gray-500"
                 />
                 {errors.part && <p className="text-xs text-vector-red mt-1">{errors.part}</p>}
               </div>
 
               {/* Mensaje Opcional */}
               <div>
-                <label htmlFor="form-message" className="block text-xs font-bold uppercase tracking-wider text-carbon mb-2">
+                <label htmlFor="form-message" className="block text-xs font-bold uppercase tracking-wider text-white mb-2">
                   Detalles adicionales (Opcional)
                 </label>
                 <textarea
@@ -338,7 +338,7 @@ export const QuoteForm: React.FC = () => {
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   placeholder="Número de serie (VIN), versión específica o comentarios extra."
-                  className="w-full p-4 rounded-lg border border-carbon/20 bg-ivory-200/60 font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none"
+                  className="w-full p-4 rounded-lg border border-white/20 bg-[#1A1A1A] text-white font-medium focus:border-vector-red focus:ring-2 focus:ring-vector-red/30 transition-all duration-300 outline-none placeholder:text-gray-500"
                 />
               </div>
 
@@ -351,7 +351,7 @@ export const QuoteForm: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, privacyConsent: e.target.checked })}
                   className="w-5 h-5 mt-0.5 accent-vector-red rounded focus:ring-2 focus:ring-vector-red cursor-pointer"
                 />
-                <label htmlFor="privacy-consent" className="text-xs text-text-secondary leading-relaxed cursor-pointer">
+                <label htmlFor="privacy-consent" className="text-xs text-gray-300 leading-relaxed cursor-pointer">
                   Acepto el aviso de privacidad y autorizo el contacto para dar seguimiento a la cotización de mis refacciones automotrices.
                 </label>
               </div>
