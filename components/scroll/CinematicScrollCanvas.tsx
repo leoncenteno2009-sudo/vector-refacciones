@@ -150,7 +150,7 @@ function drawMechanicalAssembly(
   const isCompact = width < 700
   const destinationHeight = isCompact ? height * 0.7 : height * 0.66
   const destinationWidth = destinationHeight * (sourceWidth / sourceHeight)
-  const destinationX = isCompact ? width * -0.58 : width * 0.39
+  const destinationX = isCompact ? width * -0.58 : width * 0.43
   const destinationY = isCompact ? height * 0.03 : height * 0.12
 
   mechanicalSprites.forEach((sprite) => {
