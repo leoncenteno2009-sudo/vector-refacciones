@@ -93,7 +93,7 @@ export const Header: React.FC = () => {
         </nav>
 
         {/* Right CTA */}
-        <div className="hidden lg:flex items-center gap-3">
+        <div className="hidden sm:flex items-center gap-3">
           {siteConfig.contact.whatsapp && (
             <a
               href={`${siteConfig.contact.whatsapp}?text=${encodeURIComponent(

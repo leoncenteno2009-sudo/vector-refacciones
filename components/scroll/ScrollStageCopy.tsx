@@ -47,27 +47,38 @@ export const ScrollStageCopy: React.FC<ScrollStageCopyProps> = ({ currentStateIn
       )}
 
       <div className="stage-copy__actions">
-        <a className={`vector-button ${isDistribution ? 'vector-button--red' : ''}`} href={state.primaryCTA.href}>
-          <span>{state.primaryCTA.label}</span>
-          <ArrowRight aria-hidden="true" />
-        </a>
-        {state.secondaryCTA && (
-          <a className="vector-button vector-button--ghost" href={state.secondaryCTA.href}>
-            {state.secondaryCTA.label}
-          </a>
-        )}
-        {currentStateIndex === 0 && siteConfig.contact.whatsapp && (
-          <a
-            className="vector-button bg-[#25D366] hover:bg-[#20bd5a] border-transparent text-white shadow-[0_4px_16px_rgba(37,211,102,0.35)] hover:shadow-[0_8px_24px_rgba(37,211,102,0.5)] hover:-translate-y-0.5 transition-all duration-300"
-            href={`${siteConfig.contact.whatsapp}?text=${encodeURIComponent(
-              'Hola VECTOR, me gustaría cotizar una refacción automotriz.'
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <WhatsAppIcon className="w-5 h-5 text-white shrink-0" />
-            <span>Cotizar por WhatsApp</span>
-          </a>
+        {currentStateIndex === 0 ? (
+          <>
+            <a className="vector-button" href="#cotizacion">
+              <span>Solicitar cotización</span>
+              <ArrowRight aria-hidden="true" />
+            </a>
+            {siteConfig.contact.whatsapp && (
+              <a
+                className="vector-button bg-[#25D366] hover:bg-[#20bd5a] border-transparent text-white shadow-[0_4px_16px_rgba(37,211,102,0.35)] hover:shadow-[0_8px_24px_rgba(37,211,102,0.5)] hover:-translate-y-0.5 transition-all duration-300"
+                href={`${siteConfig.contact.whatsapp}?text=${encodeURIComponent(
+                  'Hola VECTOR, me gustaría cotizar una refacción automotriz.'
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <WhatsAppIcon className="w-5 h-5 text-white shrink-0" />
+                <span>Cotizar por WhatsApp</span>
+              </a>
+            )}
+          </>
+        ) : (
+          <>
+            <a className={`vector-button ${isDistribution ? 'vector-button--red' : ''}`} href={state.primaryCTA.href}>
+              <span>{state.primaryCTA.label}</span>
+              <ArrowRight aria-hidden="true" />
+            </a>
+            {state.secondaryCTA && (
+              <a className="vector-button vector-button--ghost" href={state.secondaryCTA.href}>
+                {state.secondaryCTA.label}
+              </a>
+            )}
+          </>
         )}
       </div>
     </div>
